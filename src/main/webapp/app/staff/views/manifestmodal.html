@@ -1,0 +1,43 @@
+<div id="downloadManifestModal" >
+    <div>
+        <form name="manifestForm" id="manifestForm" novalidate>
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close"><span aria-hidden="true" ng-click='manifest.hideManifestModal()'>&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">
+                    <span id="downloadManifestModalTitle">Download Manifest</span>
+                </h4>
+            </div>
+            <div class="modal-body tcp-scrollable-modal" style='overflow-y: inherit'>
+                <div class="row">
+                    <div class="col-sm-12 p10">
+                        <div class="col-sm-4">
+                            <label for="name" class="tcp-modal-label">
+                                Manifest Date<span class="icon-asterisk icon-required"></span>
+                            </label>
+                        </div>
+                        <div class="col-sm-8 padding-left">  
+                            <div class="input-group amp-date">
+                                <input type="text" class="form-control" id="manifestDate" name="manifestDate" ng-model="manifest.manifestDate" datetime-picker="dd/MM/yyyy" ng-change="manifest.clearDeliveryDateTime()" is-open="manifest.open.manifestDate" ng-focus="manifest.openCalendar($event, 'manifestDate')" enable-time="false" show-weeks="false" ng-click="manifest.openCalendar($event, 'manifestDate')" >
+                                <label for="manifestDate" class="input-group-addon" ng-click="manifest.openCalendar($event, 'manifestDate')"><i class="fa fa-calendar"></i></label>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="btn-group overflow">
+                    <a ng-disabled="manifest.manifestDate==null" ng-href="{{apiPath + '/staff/' + manifest.selectedStaffId + '/manifest/' + manifest.manifestDate.getTime()}}" download class="btn btnSave1" id="btnSaveCollection"  ng-click="manifest.hideManifestModal()">Download</a>
+                    <a ng-disabled="manifest.manifestDate==null" ng-href="{{apiPath + '/staff/' + manifest.selectedStaffId + '/manifest/' + manifest.manifestDate.getTime()}}" download class="btn btn-primary btnIconSave" aria-expanded="false" ng-click="manifest.hideManifestModal()">
+                        <i class="fa fa-download"></i>
+                    </a>
+                </div>
+                <div class="btn-group overflow">
+                    <button type="button" class="btn btnCancel1" id="btnCancelCOllection" ng-click="manifest.hideManifestModal()">Cancel</button>
+                    <button  type="button" class="btn btn-primary dropdown-toggle btnRed" aria-expanded="false" ng-click="manifest.hideManifestModal()">
+                        <i class="fa fa-close"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

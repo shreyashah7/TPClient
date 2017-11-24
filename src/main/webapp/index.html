@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html class="wf-opensans-n6-active wf-opensans-n4-active wf-active" ng-app="tpc" ng-controller="MainController">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Traffic Program Home</title>
+        <link rel="stylesheet" href="css/stylesheet.css?version=v$VERSION$" type="text/css" charset="utf-8">
+        <link href="css/jquery-ui.css?version=v$VERSION$" rel="stylesheet" type="text/css">
+        <link href="bower_components/bootstrap/dist/css/bootstrap.min.css?version=v$VERSION$" rel="stylesheet" type="text/css">  
+        <link href="css/style.css?version=v$VERSION$" rel="stylesheet" type="text/css">
+        <!--Css for autocomplete-->
+        <link href="css/datepicker.css?version=v$VERSION$" rel="stylesheet" type="text/css">
+        <link href="css/animate.css?version=v$VERSION$" rel="stylesheet" type="text/css">
+        <link href="css/dropdown.css?version=v$VERSION$" rel="stylesheet" type="text/css">
+        <link href="css/tpclientstyle.css?version=v$VERSION$" rel="stylesheet" type="text/css">
+        <link href="css/chosen.css?version=v$VERSION$" rel="stylesheet" type="text/css">
+        <link href="css/new-css.css?version=v$VERSION$" rel="stylesheet" type="text/css">
+        <link href="css/font-awesome.min.css?version=v$VERSION$" rel="stylesheet" type="text/css">
+        <link href="css/roboto.css?version=v$VERSION$" rel='stylesheet' type='text/css'>
+    </head>
+    <body id="mainBody">
+
+        <!--Header start
+        <!--Desktop Main menu--> 
+        <div class="headerNotHome hidden-sm hidden-xs shd">
+            <div class="container">
+                <div class="row top25">
+                    <div class="col-md-8 padding-right"> 
+                        <div class="logoNav  panel">
+                            <div class="">
+                                
+                                <nav class="navbar navbar-default" role="navigation" id="mainMenu" ng-if='isLogin'>
+                                    <div class="collapse navbar-collapse" style="position: relative;">
+                                        <ul class="nav navbar-nav tpc-nav">  
+                                            <li ng-class="{'current':isCurrent('/planning')}">
+                                                <a href="#/planning" id="menuPlanning" >Planning</a> 
+                                            </li>
+                                            <li ng-class="{'current':isCurrent('/jobs')}" id="menuJobs"><a href="#jobs">Jobs</a></li>
+                                            <li ng-class="{'current':isCurrent('/vehicle')}" id="menuVehicles"><a href="#vehicle">Vehicles</a></li>
+                                            <li ng-class="{'current':isCurrent('/staff')}" id="menuStaff"><a href="#staff">Staff</a></li>
+                                            <li ng-class="{'current':isCurrent('/customers')}" id="menuCustomers"><a href="#customers">Customers</a></li>
+                                            <li ng-class="{'current':isCurrent('/invoicing')}" id="menuInvoices"><a href="#invoicing">Invoicing</a></li>
+                                        </ul>
+                                    </div>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 padding-left">
+                        
+                        <div id="cogDropDown" class="dropdown pull-right" ng-if='isLogin'>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default dropdown-toggle" id="administrationMenu" data-toggle="dropdown" aria-expanded="false">
+                                    <span class=" glyphicon glyphicon-cog"></span>
+                                    <span class="caret"></span>
+                                </button>
+                                <ul id="topAdminMenu" class="dropdown-menu shopcart_popup shopopen_popup" role="menu">
+                                    <li><a id="licenceTypesMenu" href="#admin/licencetypes" >Licence Types</a></li>
+                                    <li><a id="licenceTypesMenu" href="#admin/users" >Admin Users</a></li>
+                                </ul>
+                            </div>
+                            <button class="btn btn-default" id="logoutButton" ng-click="logout()"  ng-if="isLogin">Logout</button>
+                        </div>
+                        <span class="pull-right  user-name ng-binding" ng-bind="currentUser.firstName + ' ' + currentUser.surName" ng-if='isLogin'></span>    
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-5"></div>
+            <div class="col-md-6">
+                <div ng-repeat="alert in alerts" style="width: auto" class="btn button color alert-message" type="alert.type" id ="savedMessage" ng-class="{'fade-out':alert.expired,'fade-in':!alert.expired}">
+                    <div>
+                        <span ng-bind="alert.msg"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="homeMainImage hidden-sm hidden-xs" data-stellar-background-ratio="0.3"></div>		
+        <div class="row" style="margin:0px auto;">
+            <div class="col-md-5"></div>
+            <div class="col-md-5 ">
+                <div ng-repeat="alert in unAuthorizedAlerts"  class="btn button color alert-message  unautho-acess" type="alert.type" id="unauthorizedMessage" ng-class="{
+                        'fade-out'
+                        :alert.expired,  'fade-in':!alert.expired}" ng-cloak>
+                    <div><span ng-bind="alert.msg"></span></div>
+                </div>
+            </div> 
+        </div>
+        <div ng-view class="page-wrap" >
+
+        </div>
+        <div class="overflow" style="min-height:130px">
+        </div>
+        <!--Bower components-->
+        <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js?version=v$VERSION$"></script>
+        <script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.min.js?version=v$VERSION$"></script>
+        <script src="bower_components/angular/angular.min.js?version=v$VERSION$"></script>
+        <script src="bower_components/angular-route/angular-route.min.js?version=v$VERSION$"></script>
+        <script src="bower_components/angular-resource/angular-resource.min.js?version=v$VERSION$"></script>
+        <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="scripts/ui-bootstrap-tpls.js?version=v$VERSION$"></script>
+        <script src="bower_components/gm.datepickerMultiSelect/dist/gm.datepickerMultiSelect.min.js?version=v$VERSION$"></script>
+        <script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.min.js?version=v$VERSION$"></script>
+        <script src="bower_components/bootstrap-ui-datetime-picker/dist/datetime-picker.min.js?version=v$VERSION$"></script>
+        <script src="bower_components/chosen/chosen.jquery.min.js?version=v$VERSION$"></script>
+        <!--Angular config files-->
+        <script src="app/app.js?version=v$VERSION$"></script>
+        <script src="app/routes.js"></script>
+        <!--Module initializers-->
+        <script src="app/_init.js?version=v$VERSION$"></script>
+        <!--Common files-->
+        <script src="app/common/service/alerts.service.js?version=v$VERSION$"></script>
+        <script src="app/common/controller/main.controller.js?version=v$VERSION$"></script>
+        <!--Login Module-->
+        <script src="app/login/controller/login.controller.js?version=v$VERSION$"></script>
+        <script src="app/login/service/login.service.js?version=v$VERSION$"></script>
+        
+        <script src="app/common/controller/confirmationmodal.controller.js?version=v$VERSION$"></script>
+        <script src="app/common/directive/modal.directive.js?version=v$VERSION$"></script>
+        <script src="app/common/directive/numbersonly.directive.js?version=v$VERSION$"></script>
+        <script src="app/common/directive/alphanumericonly.directive.js?version=v$VERSION$"></script>
+        <script src="app/common/directive/dropdown.directive.js?version=v$VERSION$"></script>
+        <script src="app/common/directive/chosen.directive.js?version=v$VERSION$"></script>
+        <script src="app/common/directive/closeonenter.directive.js?version=v$VERSION$"></script>
+        <script src="app/common/directive/hoverover.directive.js?version=v$VERSION$"></script>
+        <script src="app/common/directive/draganddrop.directive.js?version=v$VERSION$"></script>
+        <script src="app/common/filter/truefalse.filter.js?version=v$VERSION$"></script>
+        <script src="app/common/filter/uniquefilter.js?version=v$VERSION$"></script>
+
+        <!--Home module-->
+        <script src="app/home/controller/home.controller.js?version=v$VERSION$"></script>
+
+        <!--Customer module-->
+        <script src="app/customer/controller/customer.controller.js?version=v$VERSION$"></script>
+        <script src="app/customer/service/customer.service.js?version=v$VERSION$"></script>
+
+        <script src="app/staff/controller/staff.controller.js?version=v$VERSION$"></script>
+        <script src="app/staff/service/staff.service.js?version=v$VERSION$"></script>
+        <script src="app/staff/controller/manifestmodal.controller.js?version=v$VERSION$"></script>
+        <script src="app/staff/controller/absencemodal.controller.js?version=v$VERSION$"></script>
+        <script src="app/vehicle/controller/vehicle.controller.js?version=v$VERSION$"></script>
+        <script src="app/vehicle/service/vehicle.service.js?version=v$VERSION$"></script>
+
+        <!--Planning module-->
+        <script src="app/planning/controller/planning.controller.js?version=v$VERSION$"></script>
+        <script src="app/planning/service/planning.service.js?version=v$VERSION$"></script>
+
+        <!--Job module-->
+        <script src="app/job/controller/job.controller.js?version=v$VERSION$"></script>
+        <script src="app/job/controller/jobmodal.controller.js"></script>
+        <script src="app/job/controller/collectionPoint.controller.js"></script>
+        <script src="app/job/service/job.service.js?version=v$VERSION$"></script>
+        <script src="app/job/service/collectionPoint.service.js?version=v$VERSION$"></script>
+
+        <!--Invoice module-->
+        <script src="app/invoices/controller/invoice.controller.js?version=v$VERSION$"></script>
+        <script src="app/invoices/controller/jobForInvoiceModal.controller.js?version=v$VERSION$"></script>
+        <script src="app/invoices/service/invoice.service.js?version=v$VERSION$"></script>
+
+        <!--Admin Module-->
+        <script src="app/admin/controller/licencetype.controller.js?version=v$VERSION$"></script>
+        <script src="app/admin/service/vehiclelicencetype.service.js?version=v$VERSION$"></script>
+        <script src="app/admin/controller/user.controller.js?version=v$VERSION$"></script>
+        <script src="app/admin/service/user.service.js?version=v$VERSION$"></script>
+        <script src="app/admin/controller/changepasswordmodal.controller.js?version=v$VERSION$"></script>
+        <script>
+                                $(document).ready(function () {
+
+                                    $(".tooltips").mouseover(function () {
+                                        $(this).find('span').empty().append($(this).attr('tooltip'));
+                                    });
+                                });
+                                $(window).scroll(function () {
+                                    var scroll = $(window).scrollTop();
+                                    //>=, not <=
+                                    if (scroll >= 30) {
+                                        //clearHeader, not clearheader - caps H
+                                        $(".gray-bg").addClass("absolute-menu");
+                                        /*$(".logo_div").addClass('displayTrue');*/
+                                        $('.myImageWidth').css("width", '224px');
+                                        $(".navbar-collapse").css({
+                                            'position': 'relative'
+                                        });
+                                        $(".headerNotHome").addClass("full-bg");
+                                        $(".logo_display").css("display", "none");
+                                    } else {
+                                        $(".gray-bg").removeClass("absolute-menu");
+                                        /*$(".logo_div").removeClass('displayTrue');*/
+                                        $('.myImageWidth').css("width", '233px');
+                                        $(".logo_display").css("display", "block");
+                                        $(".headerNotHome").removeClass("full-bg");
+                                        $(".navbar-collapse").css({
+                                            'position': 'relative'
+                                        });
+                                    }
+                                });
+        </script>
+    </body>
+</html>

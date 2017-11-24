@@ -1,0 +1,246 @@
+<style>
+    .chosen-container-single .chosen-single{
+        margin-top: 0px !important;
+    }
+</style>
+<div id="jobModal">
+    <form action="" name="jobForm" id="jobForm" novalidate>
+        <div class="modal-header">
+            <button type="button" class="close" aria-label="Close" ng-click="jobModal.hideJobModal()"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="addJobLabel">
+                <span ng-if='jobModal.jobObj.id == null'>Add Job</span>
+                <span ng-if='jobModal.jobObj.id != null'>Edit Job</span>
+            </h4>
+        </div>
+        <div class="modal-body tcp-scrollable-modal" style='overflow-y: inherit'>
+            <div class="row">
+                <div class="col-sm-6 p10">
+                    <div class="col-sm-4">
+                        <label for="customer" class="tcp-modal-label">
+                            Customer <span class="icon-asterisk icon-required"></span>
+                        </label>
+                    </div>
+                    <div class="col-sm-8 padding-left">                   
+                        <select class="form-control chosen" id="customer" name="customer" ng-change="jobModal.retrieveListForCollection(jobModal.jobObj.customerId)"  ng-model="jobModal.jobObj.customerId" required chosen-search="true" ng-options='customer.id as customer.customerName for customer in jobModal.customerList' chosen-directive="jobModal.customerList">
+                        </select>
+                        <div class="error help-block" ng-show="jobForm.customer.$invalid && jobModal.jobSubmitted">
+                            <span class="red">Enter Customer Name</span>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <div class="row">
+                <div class="col-sm-6 p10">
+                    <div class="col-sm-4">
+                        <label for="vehicleSize" class="tcp-modal-label">Vehicle Size <span class="icon-asterisk icon-required"></span></label>
+                    </div>
+                    <div class="col-sm-8 padding-left">                   
+                        <div>
+                            <input type="text" ng-model="jobModal.jobObj.vehicleSize" uib-typeahead="vehicleSize for vehicleSize in jobModal.vehicleSize | filter:$viewValue | limitTo:20" class="form-control" typeahead-show-hint="true" typeahead-min-length="0" name="vehicleSize" required autocomplete="off">
+                            <i class="fa fa-caret-down inner-addon"></i>
+                        </div>
+                        <div class="error help-block" ng-show="jobForm.vehicleSize.$invalid && jobModal.jobSubmitted">
+                            <span class="red">Enter Vehicle Size</span>
+                        </div>
+                    </div>
+                </div> 
+                <div class="col-sm-6 p10">
+                    <div class="col-sm-4">
+                        <label for="vehicleType" class="tcp-modal-label">Vehicle Type <span class="icon-asterisk icon-required"></span></label>
+                    </div>
+                    <div class="col-sm-8 padding-left">   
+                        <div>
+                            <input type="text" ng-model="jobModal.jobObj.vehicleType" uib-typeahead="vehicleType for vehicleType in jobModal.vehicleTypes | filter:$viewValue | limitTo:25" class="form-control" typeahead-show-hint="true" typeahead-min-length="0" name="vehicleType" required autocomplete="off">
+                            <i class="fa fa-caret-down inner-addon"></i>
+                        </div>
+
+                        <div class="error help-block" ng-show="jobForm.vehicleType.$invalid && jobModal.jobSubmitted">
+                            <span class="red">Enter Vehicle Type</span>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <div class="row">
+                <div class="col-sm-6 p10">
+                    <div class="col-sm-4">
+                        <label for="palletQty" class="tcp-modal-label">Pallet Qty</label> 
+                    </div>
+                    <div class="col-sm-8 padding-left"> 
+                        <input class="form-control" type="text" id="palletQty" name="palletQty" ng-model="jobModal.jobObj.palletQty" numbers-only maxlength="11"/>
+                    </div>
+                </div> 
+                <div class="col-sm-6 p10">
+                    <div class="col-sm-4">
+                        <label for="weight" class="tcp-modal-label">Weight <span class="icon-asterisk icon-required"></span></label>
+                    </div>
+                    <div class="col-sm-8 padding-left">
+                        <div class="input-group">
+                            <input type="text" id="phoneNumber" ng-model="jobModal.jobObj.weight" name="weight" class="form-control" numbers-only decimalallowed="true" maxlength="10" required/>
+                            <span class="input-group-addon">kg</span>
+                        </div>
+                        <div class="error help-block" ng-show="jobForm.weight.$invalid && jobModal.jobSubmitted">
+                            <span class="red">Enter Weight</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 p10">
+                    <div class="col-sm-4">
+                        <label for="tailLiftRadio" class="tcp-modal-label">Tail Lift <span class="icon-asterisk icon-required"></span></label>
+                    </div>
+                    <div class="col-sm-8 padding-left">                   
+                        <input type="radio" id="yesTailLiftRadio" name="tailLiftRadio" ng-model="jobModal.jobObj.tailLift" ng-value="true" class="radio-button col-sm-1" required/>
+                        <div class="col-sm-2">
+                            <label for='yesTailLiftRadio'>Yes</label>
+                        </div>
+                        <input type="radio" class="radio-button col-sm-1"  name="tailLiftRadio" id="noTailLiftRadio" ng-model="jobModal.jobObj.tailLift" ng-value="false" required/>
+                        <div class="col-sm-2">
+                            <label for='noTailLiftRadio'>No</label>
+                        </div>
+                        <div class="error help-block" ng-show="jobForm.tailLiftRadio.$invalid && jobModal.jobSubmitted">
+                            <span class="red">Select Tail Lift</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 p10">
+                    <div class="col-sm-4">
+                        <label for="adrRadio" class="tcp-modal-label">ADR <span class="icon-asterisk icon-required"></span></label>
+                    </div>
+                    <div class="col-sm-8 padding-left">       
+                        <input type="radio" id="yesAdrRadio" name="adrRadio" ng-model="jobModal.jobObj.adr" ng-value="true" class="radio-button col-sm-1" required/>
+                        <div class="col-sm-2">
+                            <label for='yesAdrRadio'>Yes</label>
+                        </div>
+                        <input type="radio" class="radio-button col-sm-1" name="adrRadio" id="noAdrRadio" ng-model="jobModal.jobObj.adr" ng-value="false" required/>
+                        <div class="col-sm-2">
+                            <label for='noAdrRadio'>No</label>
+                        </div>
+                        <div class="error help-block" ng-show="jobForm.adrRadio.$invalid && jobModal.jobSubmitted">
+                            <span class="red">Select ADR</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 p10">
+                    <div class="col-sm-4">
+                        <label for="collectionPoint" class="tcp-modal-label">Collection Point <span class="icon-asterisk icon-required"></span></label>
+                    </div>
+                    <div class="col-sm-8 padding-left">        
+                        <div class="input-group">
+                            <select ng-disabled="jobModal.jobObj.customerId == null" class="form-control chosen" style="margin-bottom: 6px;" id="collectionPoint" name="collectionPoint" ng-model="jobModal.jobObj.collectionPointId" required chosen-search="true" ng-options='collectionPoint.id as collectionPoint.name for collectionPoint in jobModal.collectionPointList' chosen-directive="jobModal.collectionPointList">
+                            </select>
+                            <label for="collectionPointLabel" ng-disabled="jobModal.jobObj.customerId == null" class="input-group-addon" ng-click="jobModal.showCollectionPointModalPanel('C', jobModal.jobObj.customerId)"><i class="fa fa-plus"></i></label>
+                        </div>
+                        <div class="error help-block" ng-show="jobForm.collectionPoint.$invalid && jobModal.jobSubmitted">
+                            <span class="red">Select Collection Point</span>
+                        </div>
+                    </div>
+                </div> 
+                <div class="col-sm-6 p10">
+                    <div class="col-sm-4">
+                        <label for="collectionDateTime" class="tcp-modal-label">Collection Date <span class="icon-asterisk icon-required"></span></label>
+                    </div>
+                    <div class="col-sm-8 padding-left">
+                        <div class="input-group amp-date">
+                            <input type="text" class="form-control" id="collectionDateTime" name="collectionDateTime" ng-model="jobModal.jobObj.collectionDateTime" datetime-picker="dd/MM/yyyy hh:mm a" ng-change="jobModal.clearDeliveryDateTime()" is-open="jobModal.open.collectionDateTime" enable-time="true" show-weeks="false" required ng-click="jobModal.openCalendar($event, 'collectionDateTime')" >
+                            <label for="collectionDateTime" class="input-group-addon" ng-click="jobModal.openCalendar($event, 'collectionDateTime')"><i class="fa fa-calendar"></i></label>
+                        </div>
+                        <div class="error help-block" ng-show="jobForm.collectionDateTime.$invalid && jobModal.jobSubmitted">
+                            <span class="red">Select Collection Date</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 p10">
+                    <div class="col-sm-4">
+                        <label for="deliveryPoint" class="tcp-modal-label">Delivery Point <span class="icon-asterisk icon-required"></span></label>
+                    </div>
+                    <div class="col-sm-8 padding-left">  
+                        <div class="input-group">
+                            <select ng-disabled="jobModal.jobObj.customerId == null" class="form-control chosen" style="margin-bottom: 6px;" id="deliveryPoint" name="deliveryPoint" ng-model="jobModal.jobObj.deliveryPointId" required chosen-search="true" ng-options='deliveryPoint.id as deliveryPoint.name for deliveryPoint in jobModal.deliveryPointList' chosen-directive="jobModal.deliveryPointList">
+                            </select>
+                            <label ng-disabled="jobModal.jobObj.customerId == null" id="deliveryPointAddbtn" for="deliveryPointLabel" class="input-group-addon" ng-click="jobModal.showCollectionPointModalPanel('D', jobModal.jobObj.customerId)"><i class="fa fa-plus"></i></label>
+                        </div>
+                        <div class="error help-block" ng-show="jobForm.deliveryPoint.$invalid && jobModal.jobSubmitted">
+                            <span class="red">Select Delivery Point</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 p10">
+                    <div class="col-sm-4">
+                        <label class="tcp-modal-label">Delivery Date <span class="icon-asterisk icon-required"></span></label>
+                    </div>
+                    <div class="col-sm-8 padding-left">             
+                        <div class="input-group amp-date">
+                            <input type="text" class="form-control" id="deliveryDateTime" name="deliveryDateTime" ng-model="jobModal.jobObj.deliveryDateTime" datetime-picker="dd/MM/yyyy hh:mm a" min-date="jobModal.jobObj.collectionDateTime" ng-change="jobModal.checkCollectionDeliveryDateTime();" is-open="jobModal.open.deliveryDateTime" enable-time="true" show-weeks="false" required ng-click="jobModal.openCalendar($event, 'deliveryDateTime')">
+                            <label for="deliveryDateTime" class="input-group-addon" ng-click="jobModal.openCalendar($event, 'deliveryDateTime')"><i class="fa fa-calendar"></i></label>
+                        </div>
+                        <div class="error help-block" ng-show="jobForm.deliveryDateTime.$invalid && jobModal.jobSubmitted">
+                            <span class="red">Select Delivery Date</span>
+                        </div>
+                        <div class="error help-block" ng-show="!jobModal.deliveryDateBigger">
+                            <span class="red">Select Delivery Date greater than Collection Date</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 p10">
+                    <div class="col-sm-4">
+                        <label for='priceQuted' class="tcp-modal-label">Price Quoted <span class="icon-asterisk icon-required"></span></label>
+                    </div>
+                    <div class="col-sm-8 padding-left">       
+                        <div class="input-group">
+                            <span class="input-group-addon"><i>£</i></span>
+                            <input type="text" id="priceQuoted" ng-model="jobModal.jobObj.priceQuoted" name="priceQuoted" class="form-control" numbers-only decimalallowed="true" decimallimit="2" maxlength="10" required/>
+                        </div>
+                        <div class="error help-block" ng-show="jobForm.priceQuoted.$invalid && jobModal.jobSubmitted">
+                            <span class="red">Enter Price Quoted</span>
+                        </div>
+                    </div>
+                </div> 
+                <div class="col-sm-6 p10">
+                    <div class="col-sm-4">
+                        <label for='comments' class="tcp-modal-label">Comments <span class="icon-asterisk icon-required"></span></label>
+                    </div>
+                    <div class="col-sm-8 padding-left">                   
+                        <textarea class='form-control' rows='2' id='comments' name='comments' ng-model='jobModal.jobObj.comments' required></textarea>
+                        <div class="error help-block" ng-show="jobForm.comments.$invalid && jobModal.jobSubmitted">
+                            <span class="red">Enter Comments</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-if='jobModal.jobObj.id != null'>
+                <div class="col-sm-6 p10" >
+                    <div class="col-sm-4">
+                        <label for='status' class="tcp-modal-label">Status</label>
+                    </div>
+                    <div class="col-sm-2 padding-left">                   
+                        <span id='status'>{{jobModal.jobObj.status}}</span>
+                    </div>
+                    <div class="col-sm-6" ng-if="jobModal.jobObj.status == 'Delivered'">
+                        <button type="button" class="btn btnSave1" id="btnInvoiceSent"  ng-click="jobModal.invoiceSent(jobModal.jobObj.id)">Invoice sent</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="btn-group overflow">
+                <button ng-disabled="jobModal.saveDisabled" type="button" class="btn btnSave1" id="btnSaveJob"  ng-click="jobModal.saveJob(jobForm)">Save</button>
+                <button ng-disabled="jobModal.saveDisabled" type="button" class="btn btn-primary dropdown-toggle btnIconSave" aria-expanded="false" ng-click="jobModal.saveStaff(jobForm)">
+                    <i class="fa fa-edit"></i>
+                </button>
+            </div>
+            <div class="btn-group overflow">
+                <button type="button" class="btn btnCancel1" id="btnCancelJob" ng-click="jobModal.hideJobModal()">Cancel</button>
+                <button type="button" class="btn btn-primary dropdown-toggle btnRed" aria-expanded="false" ng-click="jobModal.hideJobModal()">
+                    <i class="fa fa-close"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

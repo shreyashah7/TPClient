@@ -1,0 +1,101 @@
+<div class="main_section">
+    <div class="main-bg-img-orders"></div>
+    <div class="container-fluid main-bg-image ">
+        <div class="container">
+            <div class="row table_sections">
+                <div class="table_section">
+                    <div class="row">
+                        <div class="btn_group_bar overflow bg-black padding20">
+                            <div class="col-md-6 padding0">
+                                <span id="titleSubHeader" class="customer_id new_content_header white">Admin Users</span>
+                            </div>
+                            <div class="col-md-6 padding0">
+                                <span class="pull-right">
+                                    <a class="tooltips" ng-click="userCtrl.addNewRow(userForm)" ng-scroll="userTable" scroll-flag="userCtrl.scrollFlag"  title="Add new User" tooltip-position="top" >
+                                        <i class="fa fa-plus-square text-green"></i>
+                                    </a>
+                                    <a class="text-green" ng-click="userCtrl.addNewRow(userForm)" ng-scroll="userTable" scroll-flag="userCtrl.scrollFlag"  title="Add new User" tooltip-position="top" id="addNewUserLink">Add User</a>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <div class="btn-group overflow">
+                                        <button  class="btn btnSave1" id="btnSave" ng-click="userCtrl.saveUsers(userForm)" ng-disabled="userCtrl.saveDisabled">Save</button>
+                                        <button type="button" class="btn btn-primary dropdown-toggle btnIconSave" aria-expanded="false" ng-click="userCtrl.saveUsers(userForm)" ng-disabled="userCtrl.saveDisabled">
+                                            <i class="fa fa-floppy-o"></i>
+                                        </button>
+                                    </div>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>   
+                <div class="row top30">
+                    <div class="panel">
+                        <div infinite-scroll='userCtrl.nextPage()' infinite-scroll-distance="2" class="col-md-12 overflow-visible padding0 table-responsive">
+                            <form name="userForm">
+                                <table id="userTable" class="new-order-table white-bg-table" style='table-layout: fixed'>
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 30%"><span class="icon-asterisk icon-required"></span>Email</th>
+                                            <th style="width: 27%"><span class="icon-asterisk icon-required"></span>First Name</th>
+                                            <th style="width: 27%"><span class="icon-asterisk icon-required"></span>Surname</th>
+                                            <th style="width: 6%"><span class="icon-asterisk icon-required"></span>Active</th>
+                                            <th style="width: 10%"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="user in userCtrl.userList" ng-form="userRowForm" >
+                                            <td class="text-left"> 
+                                                <div ng-class="{'has-error':(userRowForm.email.$invalid && userCtrl.userFormSubmitted) || user.emailIdUnavailable}">
+                                                    <input element-focus index="{{$index}}" type="text" class="form-control input-sm product-description" id="email{{$index + 1}}" name="email" ng-model="user.email" 
+                                                           ng-pattern="emailFormat" ng-change="userCtrl.userChange(user)" ng-auto-expand required ng-blur="userCtrl.checkEmailIdAvailability(user, $index)">
+                                                    <div class="error,help-block" ng-show="userRowForm.email.$invalid && userCtrl.userFormSubmitted">
+                                                        <span class="help-block" ng-show="userRowForm.email.$error.required">Email required</span>
+                                                        <span class="help-block" ng-show="userRowForm.email.$error.pattern">Enter correct email</span>
+                                                    </div>
+                                                    <div class="error,help-block" ng-show="user.emailIdUnavailable">
+                                                        <span class="help-block">User with same email id exists</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div ng-class="{'has-error':userRowForm.firstName.$invalid && userCtrl.userFormSubmitted}">
+                                                    <input element-focus index="{{$index}}" type="text" class="form-control input-sm product-description" id="firstName{{$index + 1}}" name="firstName" ng-model="user.firstName" 
+                                                           ng-change="userCtrl.userChange(user)" ng-auto-expand required>
+                                                    <div class="error,help-block" ng-show="userRowForm.firstName.$invalid && userCtrl.userFormSubmitted">
+                                                        <span class="help-block">Enter firstname</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div ng-class="{'has-error':userRowForm.surName.$invalid && userCtrl.userFormSubmitted}">
+                                                    <input element-focus index="{{$index}}" type="text" class="form-control input-sm product-description" id="surName{{$index + 1}}" name="surName" ng-model="user.surName" 
+                                                           ng-change="userCtrl.userChange(user)" ng-auto-expand required>
+                                                    <div class="error,help-block" ng-show="userRowForm.surName.$invalid && userCtrl.userFormSubmitted">
+                                                        <span class="help-block">Enter surname</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group" >
+                                                    <input type="checkbox" id="active{{$index + 1}}" ng-model="user.active" 
+                                                           ng-change="userCtrl.userChange(user)" style="height: 20px;width: 20px; margin-top: 10px">							
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="padding-top: 10px">
+                                                    <a ng-show="user.id" tooltip="Click to change password" id="changePassword{{$index + 1}}" tooltip-placement="top" ng-click="userCtrl.showChangePasswordModal(user.id)"> 
+                                                        Change Password</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

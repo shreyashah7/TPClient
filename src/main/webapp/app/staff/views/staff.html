@@ -1,0 +1,420 @@
+<div class="main_section" ng-init="staff.retrieveResults()">
+    <img src="images/12.jpg" id="bg-img-scroll" />
+    <div class="main-bg-img-orders"></div>
+    <div class="container-fluid main-bg-image ">
+        <div class="container">
+            <div class="row table_sections">
+                <form novalidate="">
+                    <div class="table_section">
+                        <div class="col-md-12 bg-black subheadwm">
+                            <div class="btn_group_bar">
+                                <div class="col-md-6 padding0">
+                                    <span id="titleSubHeader" class="project_id white title-sub-header">Staff</span>
+                                </div>
+                            </div> 
+                        </div>   
+                        <div class="col-md-12 padding0">
+                            <div class="bg-gray bottom-arw overflow padding20">
+                                <div class="col-md-9 search-form padding0">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control newSearch" placeholder="Enter the driver name" name="searchStaffs" ng-change="staff.searchStaffs()" id="searchStaffs" ng-model-options="{debounce: {'default': 500}}" ng-model="staff.searchedStaff">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-default" id="btnSearchStaff" type="submit" ng-click="staff.searchStaffs()"><i class="glyphicon glyphicon-search white"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 padding0 overflow">
+                                    <a href="" ng-click="staff.addModalPanel()">
+                                        <button class="btn bg-green" id="btn-top-search">
+                                            Create a new staff
+                                        </button>
+                                    </a>    
+                                </div>    
+                            </div> 
+
+                        </div>
+                        <div class="clearfix"></div>
+                        <div  class="col-md-12 padding0 top30" infinite-scroll='staff.nextPageForStaffs()' infinite-scroll-distance="2">
+                            <table id="staffTable" class="standard-table table-striped jobTable">
+                                <thead>
+                                    <tr>
+                                        <th class="dropdown" >
+                                            <span ng-click = 'staff.setOrder("driverName")' id="sortDriverName">
+                                                Driver Name
+                                            </span>
+                                            <span class="pull-right">
+                                                <span>
+                                                    <span id="filterDriverName" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': staff.staffFilters.driverName !== undefined && staff.staffFilters.driverName !== ''}" tooltip="Filter by Driver Name" tooltip-position="top" ng-click="staff.setflag()"></span>
+                                                    <ul class="dropdown-menu filter-dropdown" role="menu" tpc-dropdown >
+                                                        <li role="presentation">
+                                                            <input type="text" ng-model-options="{debounce: {'default': 500}}" closeenter="filterDriverName" flag="staff.setFocus" id="name" placeholder="Driver Name" name="name" class="form-control" ng-model='staff.staffFilters.driverName' ng-change="staff.filterStaffs()" />
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </span>
+                                        </th>
+                                        <th class="dropdown" >
+                                            <span>
+                                                Licence Class
+                                            </span>
+                                            <span class="pull-right">
+                                                <span>
+                                                    <span id="filterLicenceId" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': staff.staffFilters.licenceClass !== undefined && staff.staffFilters.licenceClass !== ''}" tooltip="Filter by licence class" tooltip-position="top"  ng-click="staff.setflag()"></span>
+                                                    <ul class="dropdown-menu filter-dropdown" role="menu" tpc-dropdown >
+                                                        <li role="presentation">
+                                                            <input type="text" ng-model-options="{debounce: {'default': 500}}" closeenter="filterLicenceClass" flag="staff.setFocus" id="LicenceClassFilter" placeholder="License Class" name="LicenceClassFilter" class="form-control" ng-model='staff.staffFilters.licenceClass' ng-debounce ng-change="staff.filterStaffs()" />
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </span>
+                                        </th>
+                                        <th id="licenceNumberHeader" >
+                                            <span>
+                                                Licence Number
+                                            </span>
+                                        </th>
+                                        <th id="ADRHeader"><span>ADR</span></th>
+                                        <th id="phoneNumHeader"><span>Phone Number</span></th>
+                                        <th id="mobileHeader"><span>Mobile</span></th>   
+                                        <th id="dobHeader"><span>D.O.B</span></th> 
+                                        <th id="addressHeader"><span>Address</span></th>
+                                        <th id="cityTownHeader"><span>City/Town</span></th>
+                                        <th id="countyHeader"><span>County</span></th>
+                                        <th id="postCodeHeader"><span>Post Code</span></th>
+                                        <th id="empDateHeader" ng-click = 'staff.setOrder("employmentDate")'><span>Employment Date</span></th>
+                                        <th id="eyeTestHeader" ng-click = 'staff.setOrder("eyeTest")'><span>Eye Test</span></th>
+                                        <th id="hourContractHeader">Hour Contract </th>
+                                        <th id="absenceHeader"></th>
+                                        <th id="downloadManifestHeader" style='width:5%'></th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-show="!staff.staffList || staff.staffList.length == 0">
+                                    <tr>
+                                        <td colspan="14">
+                                            No staff present.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody ng-show="staff.staffList">
+                                    <tr ng-repeat="staffObj in staff.staffList" id="staffRow{{$index + 1}}">
+                                        <td ng-click="staff.viewStaff(staffObj.id)">
+                                            <p id="tblDriverName{{$index + 1}}" class="tcp-word-wrapper" ng-bind="staffObj.driverName"></p>
+                                        </td>
+                                        <td ng-click="staff.viewStaff(staffObj.id)">
+                                            <p id="tblLicenceClass{{$index + 1}}" class="tcp-word-wrapper" ng-bind="staffObj.licenceClass"></p>
+                                        </td>
+                                        <td ng-click="staff.viewStaff(staffObj.id)">
+                                            <p id="tblLicenceNumber{{$index + 1}}" class="tcp-word-wrapper" ng-bind="staffObj.licenceNumber"></p>
+                                        </td>
+                                        <td ng-click="staff.viewStaff(staffObj.id)">
+                                            <p id="tblADR{{$index + 1}}" class="tcp-word-wrapper" ng-bind="staffObj.adr ? 'Yes' : 'No'"></p>
+                                        </td>
+                                        <td ng-click="staff.viewStaff(staffObj.id)">
+                                            <p id="tblPhoneNumber{{$index + 1}}" ng-bind="staffObj.phoneNumber" class="tcp-word-wrapper"></p>
+                                        </td>
+                                        <td ng-click="staff.viewStaff(staffObj.id)">
+                                            <p id="tblMobile{{$index + 1}}" ng-bind="staffObj.mobile" class="tcp-word-wrapper"></p>
+                                        </td>
+                                        <td ng-click="staff.viewStaff(staffObj.id)">
+                                            <p id="tblDOB{{$index + 1}}"  ng-bind="staffObj.dateOfBirth | date:angularDateFormat"></p>
+                                        </td>
+                                        <td ng-click="staff.viewStaff(staffObj.id)">
+                                            <p id="tblAddress{{$index + 1}}" class="tcp-word-wrapper" ng-bind="staffObj.address"></p>
+                                        </td>
+                                        <td ng-click="staff.viewStaff(staffObj.id)">
+                                            <p id="tblCityTown{{$index + 1}}" class="tcp-word-wrapper" ng-bind="staffObj.cityTown"></p>
+                                        </td>
+                                        <td ng-click="staff.viewStaff(staffObj.id)">
+                                            <p id="tblCounty{{$index + 1}}" class="tcp-word-wrapper" ng-bind="staffObj.county"></p>
+                                        </td>
+                                        <td ng-click="staff.viewStaff(staffObj.id)">
+                                            <p id="tblPostCode{{$index + 1}}"  ng-bind="staffObj.postCode" class="tcp-word-wrapper"></p>
+                                        </td>
+                                        <td ng-click="staff.viewStaff(staffObj.id)">
+                                            <p id="tblEmploymentDate{{$index + 1}}" ng-bind="staffObj.employmentDate | date:angularDateFormat"></p>
+                                        </td>
+                                        <td ng-click="staff.viewStaff(staffObj.id)">
+                                            <p id="tblEyeTest{{$index + 1}}" ng-bind="staffObj.eyeTest | date:angularDateFormat"></p>
+                                        </td>
+                                        <td ng-click="staff.viewStaff(staffObj.id)">
+                                            <p id="tblHourContract{{$index + 1}}" class="tcp-word-wrapper" ng-bind="staffObj.hourContract"></p>
+                                        </td>
+                                        <td>
+                                            <button class="btn bg-green button" style="color: #fff" id="btnAbsence{{$index + 1}}" ng-click='staff.showAbsenceModal(staffObj.id)'>
+                                                Absence
+                                            </button>
+                                        </td>
+                                        <td style="vertical-align: top">
+                                            <a id="btnStaffManifest{{$index+1}}" tooltip-append-to-body="true" ng-click="staff.showManifestModal(staffObj.id)" tooltip-placement="top" uib-tooltip="Download Manifest">
+                                                <img src="images/pdf_icon.png" class="download-icon">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="col-md-12 padding0" ng-show="staff.staffList.length > 0 && staff.allStaffsRetrieved" >
+                                <div class="btn button color" id="noMoreStaffsMessage" ng-click="staff.addModalPanel()">Add a new staff +</div>
+                            </div>
+                        </div>
+                    </div>    
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="spacer"></div>
+    <div modal-show class="modal fade" modal-visible="staff.addStaffModalPanel" id="addStaffModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="" name="createStaffForm" id="createStaffForm" novalidate>
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="staff.hideCreateNewStaff(createStaffForm)"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="staffModalLabel" ng-if="!staff.editStaffFlag">Add Staff</h4>
+                        <h4 class="modal-title" id="staffModalLabel" ng-if="staff.editStaffFlag">Edit Staff</h4>
+                    </div>
+                    <div class="modal-body tcp-scrollable-modal" style="overflow-y: {{staff.staffObject.temporary == true ? 'inherit' : 'auto'}}">
+                        <div class="row">
+                            <div class="col-sm-6 p10">
+                            </div> 
+                            <div class="col-sm-6 p10">
+                                <div class="col-sm-4 pull-right">
+                                    <input type="checkbox" id="staffTemporarycheckbox" ng-model="staff.staffObject.temporary" 
+                                           ng-change="staff.checkTemporary(staff.staffObject.temporary)" style="height: 15px;width: 15px">
+                                    <span style="cursor: default" ng-click="staff.temporaryStaffCheck(staff.staffObject.temporary)">Temporary Staff</span>
+                                </div>
+
+                            </div> 
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 p10">
+                                <div class="col-sm-4">
+                                    <label for='driverName' class="tcp-modal-label">Driver Name <span class="icon-asterisk icon-required"></span></label>
+                                </div>
+                                <div class="col-sm-8 padding-left">                   
+                                    <input type="text" class="form-control" id="driverName" name="driverName" ng-model="staff.staffObject.driverName" required maxlength="100">
+                                    <div class="error help-block" ng-show="createStaffForm.driverName.$invalid && staff.staffSubmitted">
+                                        <span class="red">Enter driver name</span>
+                                    </div>
+                                </div>
+
+                            </div> 
+                            <div class="col-sm-6 p10">
+                                <div class="col-sm-4">
+                                    <label for='licenceClass' class="tcp-modal-label">Licence Class <span class="icon-asterisk icon-required"></span></label>
+                                </div>
+                                <div class="col-sm-8 padding-left"> 
+                                    <div id="licenceClassBlock">
+                                        <input type="text" ng-model="staff.staffObject.licenceClass" uib-typeahead="licenceClass for licenceClass in staff.licenceClass | filter:$viewValue | limitTo:20" class="form-control" typeahead-show-hint="true" typeahead-min-length="0" name="licenceClass" required autocomplete="off">
+                                        <i class="fa fa-caret-down inner-addon"></i>
+                                    </div>
+                                    <div class="error help-block" ng-show="createStaffForm.licenceClass.$invalid && staff.staffSubmitted">
+                                        <span class="red">Enter Licence Class</span>
+                                    </div>
+                                </div>
+
+                            </div> 
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 p10">
+                                <div class="col-sm-4">
+                                    <label for='yesRadio' class="tcp-modal-label">Licence Number <span class="icon-asterisk icon-required"></span></label>
+                                </div>
+                                <div class="col-sm-8 padding-left">                   
+                                    <input type="text" class="form-control" id="licenceNumber" name="licenceNumber" ng-model="staff.staffObject.licenceNumber" required maxlength="50">
+                                    <div class="error help-block" ng-show="createStaffForm.licenceNumber.$invalid && staff.staffSubmitted">
+                                        <span class="red">Enter Licence Number</span>
+                                    </div>
+                                </div>
+
+                            </div> 
+                            <div class="col-sm-6 p10">
+                                <div class="col-sm-4">
+                                    <label for='yesRadio' class="tcp-modal-label">ADR<span class="icon-asterisk icon-required"></span></label>
+                                </div>
+                                <div class="col-sm-8 padding-left"> 
+                                    <input type="radio" id="yesRadio" name="adr" ng-model="staff.staffObject.adr" ng-value="true" class="radio-button col-sm-1" required/>
+                                    <div class="col-sm-3">
+                                        Yes
+                                    </div>
+                                    <input type="radio" class="radio-button col-sm-1" id="noRadio" ng-model="staff.staffObject.adr" ng-value="false" required/>
+                                    <div class="col-sm-7">
+                                        No
+                                    </div>
+                                    <div class="error help-block" ng-show="createStaffForm.adr.$invalid && staff.staffSubmitted">
+                                        <span class="red">Select ADR</span>
+                                    </div>
+                                </div>
+
+                            </div> 
+                        </div> 
+                        <div class="row">
+                            <div class="col-sm-6 p10" ng-if="staff.staffObject.temporary != true">
+                                <div class="col-sm-4">
+                                    <label for='phoneNumber' class="tcp-modal-label">Phone Number<span class="icon-asterisk icon-required"></span></label>
+                                </div>
+                                <div class="col-sm-8 padding-left">   
+                                    <input type="text" id="phoneNumber" ng-model="staff.staffObject.phoneNumber" name="phoneNumber" class="form-control" numbers-only spaceallowed="true" maxlength="20" required/>
+                                    <div class="error help-block" ng-show="createStaffForm.phoneNumber.$invalid && staff.staffSubmitted">
+                                        <span class="red">Enter Phone Number</span>
+                                    </div>
+                                </div>
+
+                            </div> 
+                            <div class="col-sm-6 p10" ng-if="staff.staffObject.temporary == true">
+                                <div class="col-sm-4">
+                                    <label for='agency' class="tcp-modal-label">Agency Company<span class="icon-asterisk icon-required"></span></label>
+                                </div>
+                                <div class="col-sm-8 padding-left">   
+                                    <input type="text" ng-model="staff.staffObject.agency" uib-typeahead="agency for agency in staff.agencyList | filter:$viewValue | limitTo:20" class="form-control" typeahead-show-hint="true" typeahead-min-length="0" name="agency" required autocomplete="on">
+                                    <div class="error help-block" ng-show="createStaffForm.agency.$invalid && staff.staffSubmitted">
+                                        <span class="red">Enter Agency Company</span>
+                                    </div>
+                                </div>
+
+                            </div> 
+                            <div class="col-sm-6 p10">
+                                <div class="col-sm-4">
+                                    <label for='mobile' class="tcp-modal-label">Mobile<span class="icon-asterisk icon-required"></span></label>
+                                </div>
+                                <div class="col-sm-8 padding-left">   
+                                    <input type="text" id="mobile" ng-model="staff.staffObject.mobile" name="mobile" class="form-control" numbers-only spaceallowed="true" maxlength="20" required/>
+                                    <div class="error help-block" ng-show="createStaffForm.mobile.$invalid && staff.staffSubmitted">
+                                        <span class="red">Enter Mobile Number</span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="row" ng-if="staff.staffObject.temporary != true">
+                            <div class="col-sm-6 p10">
+                                <div class="col-sm-4">
+                                    <label for='dateOfBirth' class="tcp-modal-label">D.O.B<span class="icon-asterisk icon-required"></span></label>
+                                </div>
+                                <div class="col-sm-8 padding-left">   
+                                    <div class="input-group amp-date">
+                                        <input type="text" class="form-control" datetime-picker="dd/MM/yyyy" id="dateOfBirth" name="dateOfBirth" ng-model="staff.staffObject.dateOfBirth" is-open="staff.open.dateOfBirth" required enable-time="false" show-weeks="false" custom-class="staff.getDayClass(date, mode)" ng-click="staff.openCalendar($event, 'dateOfBirth')" datepicker-append-to-body='true'/>
+                                        <label for="dateOfBirth" class="input-group-addon" ng-click="staff.openCalendar($event, 'dateOfBirth')"><i class="fa fa-calendar"></i></label>
+                                    </div>
+                                    <div class="error help-block" ng-show="createStaffForm.dateOfBirth.$invalid && staff.staffSubmitted">
+                                        <span class="red">Enter Date of Birth</span>
+                                    </div>
+                                </div>
+                            </div> 
+                            <div class="col-sm-6 p10">
+                                <div class="col-sm-4">
+                                    <label for='employmentDate' class="tcp-modal-label">Employment Date <span class="icon-asterisk icon-required"></span></label>
+                                </div>
+                                <div class="col-sm-8 padding-left">   
+                                    <div class="input-group amp-date">
+                                        <input type="text" class="form-control" datetime-picker="dd/MM/yyyy" id="employmentDate" name="employmentDate" ng-model="staff.staffObject.employmentDate" is-open="staff.open.employmentDate" required ng-change="staff.closeCalendar($event, 'employmentDate')" enable-time="false" show-weeks="false" ng-click="staff.openCalendar($event, 'employmentDate')" datepicker-append-to-body='true'/>
+                                        <label for="employmentDate" class="input-group-addon" ng-click="staff.openCalendar($event, 'employmentDate')"><i class="fa fa-calendar"></i></label>
+                                    </div>
+                                    <div class="error help-block" ng-show="createStaffForm.employmentDate.$invalid && staff.staffSubmitted">
+                                        <span class="red">Enter Employment Date</span>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="row" ng-if="staff.staffObject.temporary != true">
+                            <div class="col-sm-6 p10">
+                                <div class="col-sm-4">
+                                    <label for='address' class="tcp-modal-label">Address<span class="icon-asterisk icon-required"></span></label>
+                                </div>
+                                <div class="col-sm-8 padding-left">     
+                                    <textarea class='form-control' rows='2' id='address' name='address' ng-model='staff.staffObject.address' required></textarea>
+                                    <div class="error help-block" ng-show="createStaffForm.address.$invalid && staff.staffSubmitted">
+                                        <span class="red">Enter Address</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-6 p10">
+                                <div class="col-sm-4">
+                                    <label for='cityTown' class="tcp-modal-label">City/Town<span class="icon-asterisk icon-required"></span></label>
+                                </div>
+                                <div class="col-sm-8 padding-left">                   
+                                    <input type="text" class="form-control" id="cityTown" name="cityTown" ng-model="staff.staffObject.cityTown" required maxlength="70">
+                                    <div class="error help-block" ng-show="createStaffForm.cityTown.$invalid && staff.staffSubmitted">
+                                        <span class="red">Enter City/Town</span>
+                                    </div>
+                                </div>
+                            </div> 
+
+                        </div>
+                        <div class="row" ng-if="staff.staffObject.temporary != true">
+                            <div class="col-sm-6 p10">
+                                <div class="col-sm-4">
+                                    <label for='county' class="tcp-modal-label">County<span class="icon-asterisk icon-required"></span></label>
+                                </div>
+                                <div class="col-sm-8 padding-left">                   
+                                    <input type="text" class="form-control" id="county" name="county" ng-model="staff.staffObject.county" required maxlength="70">
+                                    <div class="error help-block" ng-show="createStaffForm.county.$invalid && staff.staffSubmitted">
+                                        <span class="red">Enter County</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-6 p10">
+                                <div class="col-sm-4">
+                                    <label for='postCode' class="tcp-modal-label">Post Code<span class="icon-asterisk icon-required"></span></label>
+                                </div>
+                                <div class="col-sm-8 padding-left">                   
+                                    <input type="text" class="form-control" id="postCode" name="postCode" ng-model="staff.staffObject.postCode" required maxlength="50">
+                                    <div class="error help-block" ng-show="createStaffForm.postCode.$invalid && staff.staffSubmitted">
+                                        <span class="red">Enter Post Code</span>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+
+                        <div class="row" ng-if="staff.staffObject.temporary != true">
+                            <div class="col-sm-6 p10">
+                                <div class="col-sm-4">
+                                    <label for='eyeTest' class="tcp-modal-label">Eye Test <span class="icon-asterisk icon-required"></span></label>
+                                </div>
+                                <div class="col-sm-8 padding-left">   
+                                    <div class="input-group amp-date">
+                                        <input type="text" class="form-control" datetime-picker="dd/MM/yyyy" id="eyeTest" name="eyeTest" ng-model="staff.staffObject.eyeTest" is-open="staff.open.eyeTest" required  ng-change="staff.closeCalendar($event, 'eyeTest')" enable-time="false" show-weeks="false" ng-click="staff.openCalendar($event, 'eyeTest')" datepicker-append-to-body='true'/>
+                                        <label for="eyeTest" class="input-group-addon" ng-click="staff.openCalendar($event, 'eyeTest')"><i class="fa fa-calendar"></i></label>
+                                    </div>
+                                    <div class="error help-block" ng-show="createStaffForm.eyeTest.$invalid && staff.staffSubmitted">
+                                        <span class="red">Enter Eye Test</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 p10">
+                                <div class="col-sm-4">
+                                    <label for='hourContract' class="tcp-modal-label">Hour Contract <span class="icon-asterisk icon-required"></span></label>
+                                </div>
+                                <div class="col-sm-8 padding-left">
+                                    <div class="input-group">
+                                        <input type="text" id="hourContract" ng-model="staff.staffObject.hourContract" name="hourContract" class="form-control" numbers-only maxlength="50" required/>
+                                        <span class="input-group-addon">hours</span>
+                                    </div>
+                                    <div class="error help-block" ng-show="createStaffForm.hourContract.$invalid && staff.staffSubmitted">
+                                        <span class="red">Enter Hour Contract</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="btn-group overflow">
+                            <button ng-disabled="staff.saveDisabled" type="button" class="btn btnSave1" id="btnSaveStaffYes"  ng-click="staff.saveStaff(staff.staffObject, createStaffForm)">Save</button>
+                            <button ng-disabled="staff.saveDisabled" type="button" class="btn btn-primary dropdown-toggle btnIconSave" aria-expanded="false" ng-click="staff.saveStaff(staff.staffObject, createStaffForm)">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                        </div>
+                        <div class="btn-group overflow">
+                            <button type="button" class="btn btnCancel1" id="btnSaveStaffNo" ng-click="staff.hideCreateNewStaff(createStaffForm)">Cancel</button>
+                            <button type="button" class="btn btn-primary dropdown-toggle btnRed" aria-expanded="false" ng-click="staff.hideCreateNewStaff(createStaffForm)">
+                                <i class="fa fa-close"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

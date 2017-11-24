@@ -1,0 +1,187 @@
+<div class="main_section">
+    <div class="main-bg-img-orders"></div>
+    <div class="container-fluid main-bg-image ">
+        <div class="container">
+            <div class="row table_sections">
+                <form novalidate="">
+                    <div class="table_section">
+                        <div class="col-md-12 bg-black subheadwm">
+                            <div class="btn_group_bar">
+                                <div class="col-md-6 padding0">
+                                    <span id="titleSubHeader" class="project_id white">Jobs</span>
+                                </div>
+                            </div> 
+                        </div>   
+                        <div class="col-md-12 padding0">
+                            <div class="bg-gray bottom-arw overflow padding20">
+                                <div class="col-md-7 search-form padding0">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control newSearch" placeholder="Enter the customer name " name="searchCustomers" ng-change="job.searchJobs()" id="searchCustomers" ng-model="job.searchParams.customerName" ng-model-options="{debounce: {'default': 500}}">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-default" id="btnSeachCustomer" type="submit" ng-click="job.searchJobs()"><i class="glyphicon glyphicon-search white"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="row">
+                                        <div class="btn-group  pull-right overflow" >
+                                            <button id="btnUndelivered" type="button" class="btn btn-primary dropdown-toggle btnIconSave btn-special-filter margin0 bg-green"  tooltip-class="customClass" tooltip-placement="top" uib-tooltip="Delivered Not Invoiced" tooltip-append-to-body="true" ng-click="job.setFilterFlags('uninvoiced')" ng-class="{'btnIconSaveWhite':job.searchParams.uninvoiced}">
+                                                <i class="fa fa-send"></i>
+                                            </button>
+                                        </div>
+                                        <div class="btn-group  pull-right overflow" >
+                                            <button id="btnNotInvoiced" type="button" class="btn btn-primary dropdown-toggle btn-special-filter bg-green btnIconSave" tooltip-class="customClass" tooltip-placement="top" uib-tooltip="Undelivered" tooltip-append-to-body="true" ng-click="job.setFilterFlags('undelivered')" ng-class="{'btnIconSaveWhite':job.searchParams.undelivered}">
+                                                <i class="fa fa-remove"></i>
+                                            </button>
+                                        </div>
+                                        <div class="btn-group  pull-right overflow" >
+                                            <button id="btnExpiryDate" type="button" class="btn btn-primary dropdown-toggle btn-special-filter bg-green btnIconSave" tooltip-class="customClass" tooltip-placement="top" uib-tooltip="Expired Jobs" tooltip-append-to-body="true" ng-click="job.setFilterFlags('expiredJob')" ng-class="{'btnIconSaveWhite':job.searchParams.expiredJob}">
+                                                <i class="fa fa-anchor"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 padding0 overflow">
+                                    <button class="btn bg-green button" id="btn-top-search" ng-click="job.showJobModal()">
+                                        Create a new job
+                                    </button>
+                                </div>    
+                            </div> 
+                        </div>
+                        <div class="clearfix"></div>
+                        <div  class="col-md-12 padding0 top30" infinite-scroll='job.nextPageForJobs()' infinite-scroll-distance="3">
+                            <table id="jobsTable" class="standard-table table-striped jobTable">
+                                <thead>
+                                    <tr>
+                                        <th id="customerNameHeader">Customer</th>
+                                        <th id="vehicleSizeHeader">Vehicle Size</th>
+                                        <th id="vehicleTypeHeader">Vehicle Type</th>
+                                        <th id="palletQtyHeader">Pallet Qty</th>
+                                        <th id="weightHeader">Weight</th>
+                                        <th id="tailLiftHeader">Tail Lift</th>   
+                                        <th id="adrHeader">ADR</th>   
+                                        <th id="collectionPostCodeHeader" class="dropdown">
+                                            <span>Collection Point</span>
+                                        </th>
+                                        <th id="collectionDateTimeHeader" class="dropdown">
+                                            <span ng-click="job.setOrder('collectionDateTime')">Collection Date/Time</span>
+                                            <span class="pull-right">
+                                                <span>
+                                                    <span id="filterCollectionDateTime" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': (job.searchParams.collectionFromDate != null && job.searchParams.collectionFromDate !== '') || (job.searchParams.collectionToDate != null && job.searchParams.collectionToDate !== '')}" tooltip="Filter by Collection Date/Time" tooltip-position="top" ></span>
+                                                    <ul class="dropdown-menu filter-dropdown" role="menu" tpc-dropdown >
+                                                        <li role="presentation" class="dropdown-from-datepicker">
+                                                            <input type="text"  id="collectionFromDateTime" placeholder="From Date" name="collectionFromDateTime" class="form-control" ng-model='job.searchParams.collectionFromDate' datetime-picker="dd/MM/yyyy hh:mm a" is-open="job.open.filterCollectionFromDateTime" ng-focus="job.openCalendar($event, 'filterCollectionFromDateTime')" enable-time="true" show-weeks="false" when-closed="job.searchJobs()"/>
+                                                        </li>
+                                                        <li role="presentation" class="dropdown-to-datepicker">
+                                                            <input type="text"  id="collectionToDateTime" placeholder="To Date" name="collectionToDateTime" class="form-control" ng-model='job.searchParams.collectionToDate' min-date="job.searchParams.collectionFromDate" ng-model-options="{debounce: {'default': 500}}" datetime-picker="dd/MM/yyyy hh:mm a" is-open="job.open.filterCollectionToDateTime" ng-focus="job.openCalendar($event, 'filterCollectionToDateTime')" enable-time="true" show-weeks="false" when-closed="job.searchJobs()" />
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </span>
+                                        </th>
+                                        <th id="deliveryPostCodeHeader" class="dropdown">
+                                            <span>Delivery Point</span>
+                                        </th>   
+                                        <th id="deliveryDateHeader" class="dropdown">
+                                            <span ng-click="job.setOrder('deliveryDateTime')">Delivery Date/Time</span>
+                                            <span class="pull-right">
+                                                <span>
+                                                    <span id="filterDeliveryDateTime" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': (job.searchParams.deliveryFromDate != null && job.searchParams.deliveryFromDate !== '') || (job.searchParams.deliveryToDate != null && job.searchParams.deliveryToDate !== '')}" tooltip="Filter by Delivery Date/Time" tooltip-position="top" ng-click="job.setflag()"></span>
+                                                    <ul class="dropdown-menu filter-dropdown" role="menu" tpc-dropdown >
+                                                        <li role="presentation" class="dropdown-from-datepicker">
+                                                            <input type="text"  id="deliveryFromDateTime" placeholder="From Date" name="deliveryFromDateTime" class="form-control" ng-model='job.searchParams.deliveryFromDate' ng-model-options="{debounce: {'default': 500}}" datetime-picker="dd/MM/yyyy hh:mm a" is-open="job.open.filterDeliveryFromDateTime" ng-focus="job.openCalendar($event, 'filterDeliveryFromDateTime')" enable-time="true" show-weeks="false" when-closed="job.searchJobs()" />
+                                                        </li>
+                                                        <li role="presentation" class="dropdown-to-datepicker">
+                                                            <input type="text" id="deliveryToDateTime" placeholder="To Date" name="deliveryToDateTime" class="form-control" ng-model='job.searchParams.deliveryToDate' ng-model-options="{debounce: {'default': 500}}" min-date="job.searchParams.deliveryFromDate" datetime-picker="dd/MM/yyyy hh:mm a" is-open="job.open.filterDeliveryToDateTime" ng-focus="job.openCalendar($event, 'filterDeliveryToDateTime')" enable-time="true" show-weeks="false" when-closed="job.searchJobs()" />
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </span>
+                                        </th>   
+                                        <th id="priceQuotedHeader">Price Quoted</th>   
+                                        <th id="commentHeader">Comments</th>   
+                                        <th id="statusHeader" class="dropdown">
+                                            Status
+                                            <span class="pull-right">
+                                                <span>
+                                                    <span id="filterStatusDropdown" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': job.searchParams.status != null && job.searchParams.status !== ''}" tooltip="Filter by Status" tooltip-position="top"></span>
+                                                    <ul class="dropdown-menu filter-dropdown dropdown-menu-right" tpc-dropdown>
+                                                        <li role="presentation">
+                                                            <select class="form-control chosen" id="filterStatus" name="filterStatus" ng-model="job.searchParams.status"  ng-options='status for status in job.statusList' chosen-directive="job.statusList" ng-change="job.searchJobs()">
+                                                                <option value="">Select an option</option>
+                                                            </select>
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </span>
+                                        </th>   
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-if="job.responseComplete && (!job.jobList || job.jobList.length == 0)">
+                                        <td colspan="14">
+                                            No job present.
+                                        </td>
+                                    </tr>
+                                    <tr ng-if="job.responseComplete && job.jobList.length > 0" ng-repeat="jobObj in job.jobList" ng-click="job.showJobModal(jobObj.id)">
+                                        <td>
+                                            <p class="tcp-word-wrapper" id="tblCustomerName{{$index + 1}}" ng-bind="jobObj.customer.customerName"></p>
+                                        </td>
+                                        <td>
+                                            <p class="tcp-word-wrapper" id="tblVehicleSize{{$index + 1}}" ng-bind="jobObj.vehicleSize"></p>
+                                        </td>
+                                        <td>
+                                            <p class="tcp-word-wrapper" id="tblVehicleType{{$index + 1}}" ng-bind="jobObj.vehicleType"></p>
+                                        </td>
+                                        <td>
+                                            <p class="tcp-word-wrapper" id="tblPalletQty{{$index + 1}}" ng-bind="jobObj.palletQty == null ? 'N/A' : jobObj.palletQty"></p>
+                                        </td>
+                                        <td>
+                                            <p class="tcp-word-wrapper" id="tblWeight{{$index + 1}}" ng-bind="jobObj.weight"></p>
+                                        </td>
+                                        <td>
+                                            <p class="tcp-word-wrapper" id="tblTailLift{{$index + 1}}" ng-bind="jobObj.tailLift | true_false"></p>
+                                        </td>
+                                        <td>
+                                            <p class="tcp-word-wrapper" id="tblAdr{{$index + 1}}" ng-bind="jobObj.adr | true_false"></p>
+                                        </td>
+                                        <td>
+                                            <p class="tcp-word-wrapper" id="tblCollectionPostcode{{$index + 1}}" ng-bind="jobObj.collectionPointName"></p>
+                                        </td>
+                                        <td>
+                                            <p class="tcp-word-wrapper" id="tblCollectionDateTime{{$index + 1}}" ng-bind="jobObj.collectionDateTime | date:angularDateTimeFormat"></p>
+                                        </td>
+                                        <td>
+                                            <p class="tcp-word-wrapper" id="tblDeliveryPostcode{{$index + 1}}" ng-bind="jobObj.deliveryPointName"></p>
+                                        </td>
+                                        <td>
+                                            <p class="tcp-word-wrapper" id="tblDeliveryDateTime{{$index + 1}}" ng-bind="jobObj.deliveryDateTime | date:angularDateTimeFormat"></p>
+                                        </td>
+                                        <td>
+                                            <p class="tcp-word-wrapper" id="tblPriceQuoted{{$index + 1}}" ng-bind="jobObj.priceQuoted"></p>
+                                        </td>
+                                        <td>
+                                            <p class="tcp-word-wrapper" id="tblComments{{$index + 1}}" ng-bind="jobObj.comments"></p>
+                                        </td>
+                                        <td>
+                                            <p class="tcp-word-wrapper" id="tblStatus{{$index + 1}}" ng-bind="jobObj.status"></p>
+                                            <button class="btn bg-green button" ng-if="jobObj.status == 'Quoting'" ng-click="job.acceptStatus(jobObj.id, jobObj)" style="color: #fff" id="acceptQuote{{$index + 1}}" >
+                                                Accept Job
+                                            </button>
+                                            <button class="btn bg-green button" ng-if="jobObj.status == 'New'" ng-click="job.unacceptStatus(jobObj.id, jobObj)" style="color: #fff" id="unacceptQuote{{$index + 1}}" >
+                                                Unaccept Job
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="col-md-12 padding0" ng-show="job.jobList.length > 0 && job.allJobsRetrieved">
+                                <div class="btn button color" id="noMoreJobsMessgae" ng-click="job.showJobModal()">Add a new job +</div>
+                            </div>
+                        </div>
+                    </div>    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

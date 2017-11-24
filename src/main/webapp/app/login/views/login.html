@@ -1,0 +1,50 @@
+<div ng-show="!isLogin">
+    <div class="main_section">
+        <div class="main-bg-img-orders"></div>
+        <div class="container-fluid main-bg-image ">
+            <div class="top30">
+                <div class="row table_sections">
+                    <div class="col-md-12">
+                    </div>
+                    <div class="table_section">
+                        <div class="col-md-6 col-md-offset-3">
+                            <div id="login_form">
+                                <form class="form-signin" role="form" name="loginForm" novalidate>
+                                    <h2 class="form-signin-heading">Please sign in</h2>
+                                    <div ng-if="login.isError" ng-class="{'has-error':login.isError}">
+                                        <div class="error,help-block" ng-show="login.isError">
+                                            <span class="help-block" ng-bind="login.errorMessage"></span>
+                                        </div>
+                                    </div>
+                                    <div ng-class="{'has-error':loginForm.username.$invalid && (login.loginSubmitted)}"> 
+                                        <input type="text" id="userNameField" ng-pattern="emailFormat" name="username" class="form-control" placeholder="Email Id" ng-model="login.userObject.emailId" required autofocus="">
+                                        <div class="error,help-block" ng-show="loginForm.username.$invalid && (login.loginSubmitted)">
+                                            <span class="help-block" ng-show="loginForm.username.$error.required">Enter your Email Id</span>
+                                            <span class="help-block" ng-show="loginForm.username.$error.pattern">Enter correct Email Id</span>
+                                        </div>
+                                    </div>
+
+                                    <div ng-class="{'has-error':loginForm.password.$invalid && (login.loginSubmitted)}"> 
+                                        <input type="password" id="passwordField" class="form-control login_password" ng-model="login.userObject.password" name="password" placeholder="Password" required>
+                                        <div class="error,help-block" ng-show="loginForm.password.$invalid && (login.loginSubmitted)">
+                                            <span class="help-block">Enter password</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" class="login_checkbox" value="remember-me" ng-model="login.userObject.rememberme"> <span id="remeber-me">Remember me</span>
+                                        </label>
+                                    </div>
+                                    <button class="btn btn-lg btn-primary btn-block" id="btnLoginForm" ng-click="login.doLogin(login.userObject, loginForm)"><span id="sign_in">Sign in</span></button>
+                                </form>
+                            </div>
+                        </div> 
+                    </div>
+
+                </div>    
+            </div>
+        </div>
+    </div>
+    <div id="spacer"></div>
+</div>

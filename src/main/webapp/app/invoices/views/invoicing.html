@@ -1,0 +1,246 @@
+<div class="main_section">
+    <img src="images/12.jpg" id="bg-img-scroll" />
+    <div class="main-bg-img-orders"></div>
+    <div class="container-fluid main-bg-image ">
+        <div class="container" >
+            <div class="row table_sections">
+                <div class="table_section">
+                    <div class="col-md-12 bg-black subheadwm">
+                        <div class="btn_group_bar">
+                            <div class="col-md-12 padding0">
+                                <div class="col-md-4 padding0">
+                                    <span id="titleSubHeader" class="customer_id new_content_header white">Invoicing</span>
+                                </div>
+                                <div  class="col-md-2 padding0 pull-right" style="margin-top: -10px !important;" >
+                                    <select class="form-control chosen" id="customer" ng-if="invoice.activeView == 'Create'" name="customer" ng-change="invoice.retrieveJobListForCustomerSelected(invoice.customerId)"  ng-model="invoice.customerId" required chosen-search="true" ng-options='customer.id as customer.customerName for customer in invoice.customerList' chosen-directive="invoice.customerList">
+                                        <option value="">Select a Company</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-1 padding0 pull-right" ng-if="invoice.activeView == 'Create'">
+                                    <button ng-disabled="invoice.jobCount < 1" type="button" class="btn btnSave1" id="invoiceTab"  ng-click="invoice.openInvoiceModal()">Invoice</button><span class="count2" id="newProjectCount">{{invoice.jobCount}}</span>
+                                </div>
+                                <div class="col-md-1 padding0 pull-right" ng-if="invoice.activeView == 'Create'">
+                                    <button ng-if="invoice.jobCount > 0" type="button" class="btn btnSave1" id="btnClearJobs"  ng-click="invoice.clearSelectedJobs()">Clear</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-12 top20" style="padding-right: 18px !important;padding-left: 25px !important;">
+                            <div class="row tabpanel planning-tabs">
+                                <ul class="nav-tabs" role="tablist" id="PlanningRightTab">
+                                    <li>
+                                        <a href="" id="createTab" aria-controls="Create"  ng-class="invoice.activeView == 'Create' ? 'tabgreencolor' : 'tabcolor'" role="tab" ng-click="invoice.changeView('Create')">Create</a>
+                                    </li>
+                                    <li>
+                                        <a href="" id="btnInvoiceList" aria-controls="Invoices"  ng-class="invoice.activeView == 'Invoices' ? 'tabgreencolor' : 'tabcolor'" role="tab" ng-click="invoice.changeView('Invoices')">Invoices</a>
+                                    </li>
+                                </ul>	
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane active"   id="Create" ng-if="invoice.activeView == 'Create'">
+                                        <div class="marginleft5 col-md-12 padding-left padding-top">
+                                            <table style="table-layout: fixed" id="CreateTable" class="standard-table table-striped table-bordered margintb10 jobTable" infinite-scroll='invoice.nextPageForJobs()' infinite-scroll-distance="2"  id="newJobsTable"  infinite-scroll-parent="true">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 2%">
+                                                        </th>
+                                                        <th>
+                                                            <span>
+                                                                Customer
+                                                            </span>
+                                                        </th>
+                                                        <th class="dropdown">
+                                                            <span ng-click="invoice.setOrder1('collectionDateTime')">Collection Date/Time</span>
+                                                            <span class="pull-right">
+                                                                <span>
+                                                                    <span id="filterCollectionDateTime" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': (invoice.searchParams.collectionFromDate != null && invoice.searchParams.collectionFromDate !== '') || (invoice.searchParams.collectionToDate != null && invoice.searchParams.collectionToDate !== '')}" tooltip="Filter by Collection Date/Time" tooltip-position="top" ></span>
+                                                                    <ul class="dropdown-menu filter-dropdown dropdown-menu-right" role="menu" tpc-dropdown >
+                                                                        <li role="presentation" class="dropdown-from-datepicker">
+                                                                            <input type="text"  id="collectionFromDateTime" placeholder="From Date" name="collectionFromDateTime" class="form-control" ng-model='invoice.searchParams.collectionFromDate' datetime-picker="dd/MM/yyyy hh:mm a" is-open="invoice.open.filterCollectionFromDateTime" ng-focus="invoice.openCalendar($event, 'filterCollectionFromDateTime')" enable-time="true" show-weeks="false" when-closed="invoice.searchJobs()"/>
+                                                                        </li>
+                                                                        <li role="presentation" class="dropdown-to-datepicker">
+                                                                            <input type="text"  id="collectionToDateTime" placeholder="To Date" name="collectionToDateTime" class="form-control" ng-model='invoice.searchParams.collectionToDate' min-date="invoice.searchParams.collectionFromDate" ng-model-options="{debounce: {'default': 500}}" datetime-picker="dd/MM/yyyy hh:mm a" is-open="invoice.open.filterCollectionToDateTime" ng-focus="invoice.openCalendar($event, 'filterCollectionToDateTime')" enable-time="true" show-weeks="false" when-closed="invoice.searchJobs()" />
+                                                                        </li>
+                                                                    </ul>
+                                                                </span>
+                                                            </span>
+                                                        </th>
+                                                        <th class="dropdown">
+                                                            <span ng-click="invoice.setOrder1('collectionPoint')">
+                                                                Collection Point
+                                                            </span>
+                                                            <span class="pull-right">
+                                                                <span>
+                                                                    <span id="collectionPostFilter" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': invoice.searchParams.collectionPostCode !== undefined && invoice.searchParams.collectionPostCode !== ''}" tooltip="Filter by collection postcode" tooltip-position="top" ng-click="invoice.setflag()"></span>
+                                                                    <ul class="dropdown-menu filter-dropdown dropdown-menu-right" role="menu" tpc-dropdown >
+                                                                        <li role="presentation">
+                                                                            <input type="text" closeenter="collectionPostFilter" flag="invoice.setFocus" id="name" placeholder="Collection Point" name="name" class="form-control" ng-model='invoice.searchParams.collectionPostCode' ng-change="invoice.searchJobs()" />
+                                                                        </li>
+                                                                    </ul>
+                                                                </span>
+                                                            </span>
+                                                        </th>
+                                                        <th class="dropdown">
+                                                            <span ng-click="invoice.setOrder1('deliveryDateTime')">Delivery Date/Time</span>
+                                                            <span class="pull-right">
+                                                                <span>
+                                                                    <span id="filterDeliveryDateTime" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': (invoice.searchParams.deliveryFromDate != null && invoice.searchParams.deliveryFromDate !== '') || (invoice.searchParams.deliveryToDate != null && invoice.searchParams.deliveryToDate !== '')}" tooltip="Filter by Delivery Date/Time" tooltip-position="top" ng-click="invoice.setflag()"></span>
+                                                                    <ul class="dropdown-menu filter-dropdown dropdown-menu-right" role="menu" tpc-dropdown >
+                                                                        <li role="presentation" class="dropdown-from-datepicker">
+                                                                            <input type="text"  id="deliveryFromDateTime" placeholder="From Date" name="deliveryFromDateTime" class="form-control" ng-model='invoice.searchParams.deliveryFromDate' ng-model-options="{debounce: {'default': 500}}" datetime-picker="dd/MM/yyyy hh:mm a" is-open="invoice.open.filterDeliveryFromDateTime" ng-focus="invoice.openCalendar($event, 'filterDeliveryFromDateTime')" enable-time="true" show-weeks="false" when-closed="invoice.searchJobs()" />
+                                                                        </li>
+                                                                        <li role="presentation" class="dropdown-to-datepicker">
+                                                                            <input type="text" id="deliveryToDateTime" placeholder="To Date" name="deliveryToDateTime" class="form-control" ng-model='invoice.searchParams.deliveryToDate' ng-model-options="{debounce: {'default': 500}}" min-date="invoice.searchParams.deliveryFromDate" datetime-picker="dd/MM/yyyy hh:mm a" is-open="invoice.open.filterDeliveryToDateTime" ng-focus="invoice.openCalendar($event, 'filterDeliveryToDateTime')" enable-time="true" show-weeks="false" when-closed="invoice.searchJobs()" />
+                                                                        </li>
+                                                                    </ul>
+                                                                </span>
+                                                            </span>
+                                                        </th>
+                                                        <th class="dropdown">
+                                                            <span ng-click="invoice.setOrder1('deliveryPoint')">
+                                                                Delivery Point
+                                                            </span>
+                                                            <span class="pull-right">
+                                                                <span>
+                                                                    <span id="deliveryPostFilter" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': invoice.searchParams.deliveryPostCode !== undefined && invoice.searchParams.deliveryPostCode !== ''}" tooltip="Filter by delivery postcode" tooltip-position="top" ng-click="invoice.setflag()" uib-dropdown-toggle></span>
+                                                                    <ul class="dropdown-menu filter-dropdown dropdown-menu-right" role="menu" tpc-dropdown uib-dropdown-menu aria-labelledby="simple-dropdown">
+                                                                        <li role="presentation">
+                                                                            <input type="text" closeenter="deliveryPostFilter" flag="invoice.setFocus" id="name" placeholder="Delivery Point" name="name" class="form-control" ng-model='invoice.searchParams.deliveryPostCode' ng-change="invoice.searchJobs()" />
+                                                                        </li>
+                                                                    </ul>
+                                                                </span>
+                                                            </span>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-if="(!invoice.jobList || invoice.jobList.length == 0)">
+                                                        <td colspan="6">
+                                                            No job available.
+                                                        </td>
+                                                    </tr>
+                                                    <tr ng-if="invoice.responseComplete && invoice.jobList.length > 0" ng-repeat="jobObj in invoice.jobList" ng-click="invoice.checkJobSelected(jobObj)" data-container="body" data-toggle="popover" image="images/Job.png">
+                                                        <td>
+                                                            <input type="checkbox" id="job_checkbox{{$index + 1}}" ng-click="invoice.checkJobSelected(jobObj)" ng-model="jobObj.checked"> <span id="remeber-me"></span>
+                                                        </td>
+                                                        <td>
+                                                            <div >
+                                                                <p id="tblCustomerName{{$index + 1}}" ng-bind="jobObj.customer.customerName" class="tcp-word-wrapper" ></p>
+                                                            </div>
+
+                                                        </td>
+                                                        <td>
+                                                            <p id="tblCollectionDateTime{{$index + 1}}" ng-bind="jobObj.collectionDateTime | date:angularDateTimeFormat" class="tcp-word-wrapper" ></p>
+                                                        </td>
+                                                        <td>
+                                                            <p id="tblCollectionPostcode{{$index + 1}}" ng-bind="jobObj.collectionPointName" class="tcp-word-wrapper" ></p>
+                                                        </td>
+                                                        <td>
+                                                            <p id="tblDeliveryDateTime{{$index + 1}}" ng-bind="jobObj.deliveryDateTime | date:angularDateTimeFormat" class="tcp-word-wrapper" ></p>
+                                                        </td>
+                                                        <td>
+                                                            <p id="tblDeliveryPostcode{{$index + 1}}" ng-bind="jobObj.deliveryPointName" class="tcp-word-wrapper" ></p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane active"   id="Create" ng-if="invoice.activeView == 'Invoices'">
+                                        <div class="marginleft5 col-md-12 padding-left padding-top" >
+                                            <table id="CreateTable" class="standard-table table-striped table-bordered margintb10 jobTable" infinite-scroll='invoice.nextPageForInvoices()' infinite-scroll-distance="2"  id="newJobsTable"  infinite-scroll-parent="true">
+                                                <thead>
+                                                    <tr>
+                                                        <th id="customerFilter" class="dropdown">
+                                                            <span ng-click="invoice.setOrder('customerName')">Customer</span>
+                                                            <span class="pull-right">
+                                                                <span>
+                                                                    <span id="filterCustomer" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips dropdown-menu-right" data-toggle="dropdown" ng-class="{'active_filter': invoice.InvoiceSearchParams.customerName !== undefined && invoice.InvoiceSearchParams.customerName !== ''}" tooltip="Filter by Customer Name" tooltip-position="top" ng-click="invoice.setflag()"></span>
+                                                                    <ul class="dropdown-menu filter-dropdown dropdown-menu-right" role="menu" tpc-dropdown >
+                                                                        <li role="presentation">
+                                                                            <input type="text" closeenter="filterCustomer" flag="invoice.setFocus" id="name" placeholder="Customer" name="name" class="form-control" ng-model='invoice.InvoiceSearchParams.customerName' ng-change="invoice.searchInvoice()" />
+                                                                        </li>
+                                                                    </ul>
+                                                                </span>
+                                                            </span>
+                                                        </th>
+                                                        <th id="creationDateTimeHeader" class="dropdown">
+                                                            <span ng-click="invoice.setOrder('creationDate')">Creation Date</span>
+                                                            <span class="pull-right">
+                                                                <span>
+                                                                    <span id="filterCreationDateTime" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': (invoice.InvoiceSearchParams.creationFromDate != null && invoice.InvoiceSearchParams.creationFromDate !== '') || (invoice.InvoiceSearchParams.creationToDate != null && invoice.InvoiceSearchParams.creationToDate !== '')}" tooltip="Filter by Creation Date/Time" tooltip-position="top" ></span>
+                                                                    <ul class="dropdown-menu filter-dropdown dropdown-menu-right" role="menu" tpc-dropdown >
+                                                                        <li role="presentation" class="dropdown-from-datepicker">
+                                                                            <input type="text"  id="creationFromDateTime" placeholder="From Date" name="creationFromDateTime" class="form-control" ng-model='invoice.InvoiceSearchParams.creationFromDate' datepicker-append-to-body='true'  datetime-picker="dd/MM/yyyy hh:mm a" is-open="invoice.open.filterCreationFromDateTime" ng-focus="invoice.openCalendar($event, 'filterCreationFromDateTime')" enable-time="true" show-weeks="false" when-closed="invoice.searchInvoice()"/>
+                                                                        </li>
+                                                                        <li role="presentation" class="dropdown-to-datepicker">
+                                                                            <input type="text"  id="creationToDateTime" placeholder="To Date" name="creationToDateTime" min-date="invoice.InvoiceSearchParams.creationFromDate" class="form-control" ng-model='invoice.InvoiceSearchParams.creationToDate' ng-model-options="{debounce: {'default': 500}}" datepicker-append-to-body='true' datetime-picker="dd/MM/yyyy hh:mm a" is-open="invoice.open.filterCreationToDateTime" ng-focus="invoice.openCalendar($event, 'filterCreationToDateTime')" enable-time="true" show-weeks="false" when-closed="invoice.searchInvoice()" />
+                                                                        </li>
+                                                                    </ul>
+                                                                </span>
+                                                            </span>
+                                                        </th>
+                                                        <th id="amountFilter" class="dropdown">
+                                                            <span ng-click="invoice.setOrder('amount')">Amount</span>
+                                                            <span class="pull-right">
+                                                                <span>
+                                                                    <span id="filterCustomer" class="dropdown-menu-right sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': invoice.InvoiceSearchParams.amount !== undefined && invoice.InvoiceSearchParams.amount !== ''}" tooltip="Filter by Amount" tooltip-position="top" ng-click="invoice.setflag()"></span>
+                                                                    <ul class="dropdown-menu filter-dropdown dropdown-menu-right" role="menu" tpc-dropdown >
+                                                                        <li role="presentation">
+                                                                            <input type="text" closeenter="filterAmount" flag="invoice.setFocus" id="name" placeholder="Amount" name="amount" class="form-control" ng-model='invoice.InvoiceSearchParams.amount' ng-change="invoice.searchInvoice()" />
+                                                                        </li>
+                                                                    </ul>
+                                                                </span>
+                                                            </span>
+                                                        </th>
+                                                        <th style="width: 2%">
+                                                            <span>Export</span>
+                                                        </th>
+                                                        <th>
+                                                            <span>Loaded in Sage</span>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-if="(!invoice.invoiceList || invoice.invoiceList.length == 0)">
+                                                        <td colspan="5">
+                                                            No invoice available.
+                                                        </td>
+                                                    </tr>
+                                                    <tr ng-if="invoice.invoiceList.length > 0" ng-repeat="invoiceObj in invoice.invoiceList"  data-container="body" data-toggle="popover" image="images/Job.png">
+                                                        <td>
+                                                            <div >
+                                                                <p id="tblCustomerName{{$index + 1}}" ng-bind="invoiceObj.customerName" class="tcp-word-wrapper" ></p>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <p id="tblCollectionDateTime{{$index + 1}}" ng-bind="invoiceObj.creationDate | date:angularDateTimeFormat" class="tcp-word-wrapper" ></p>
+                                                        </td>
+                                                        <td>
+                                                            <p id="tblCollectionPostcode{{$index + 1}}" ng-bind="invoiceObj.amount" class="tcp-word-wrapper" ></p>
+                                                        </td>
+                                                        <td align="center">
+                                                            <a ng-href="{{apiPath}}/invoices/{{invoiceObj.id}}/download" class="btn-group overflow">
+                                                                <img id="export" style="height:25px;width: 25px;" src="images/export.png" >
+                                                            </a>
+                                                            <!--                                                            <button class="btn bg-green button" ng-click="invoice.exportToCSV(invoiceObj.id, invoiceObj)" style="color: #fff" id="exportToCSV{{$index + 1}}" >
+                                                                                                                            Export
+                                                                                                                        </button>-->
+                                                        </td>
+                                                        <td>
+                                                            <input type="checkbox" id="invoice_loadedInSage{{$index + 1}}" ng-click="invoice.loadInvoiceInSage(invoiceObj)" ng-model="invoiceObj.loadedInSage"> <span id="loadedInsage"></span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

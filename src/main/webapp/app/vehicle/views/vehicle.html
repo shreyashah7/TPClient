@@ -1,0 +1,613 @@
+<div class="main_section" ng-init="vehicle.retrieveVehicles()">
+    <img src="images/12.jpg" id="bg-img-scroll" />
+    <div class="main-bg-img-orders"></div>
+    <div class="container-fluid main-bg-image ">
+        <div class="container">
+            <div class="row table_sections">
+                <form novalidate="">
+                    <div class="table_section">
+                        <div class="col-md-12 bg-black subheadwm">
+                            <div class="btn_group_bar">
+                                <div class="col-md-6 padding0">
+                                    <span id="titleSubHeader" class="customer_id new_content_header white">Vehicles</span>
+                                </div>
+                            </div> 
+                        </div>   
+                        <div class="col-md-12 padding0">
+                            <div class="bg-gray bottom-arw overflow padding20">
+                                <div class="col-md-9 search-form padding0">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control newSearch" placeholder="Enter the vehicle registration " name="searchVehicles" ng-change="vehicle.searchVehicles()" id="searchVehicles" ng-model="vehicle.searchedVehicle" ng-model-options="{debounce: {'default': 500}}">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-default" id="btnSearchVehicle" type="submit" ng-click="vehicle.searchVehicles()"><i class="glyphicon glyphicon-search white"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 padding0 overflow">
+                                    <a href="" ng-click="vehicle.addModalPanel()">
+                                        <button class="btn bg-green" id="btn-top-search">
+                                            Create a new vehicle
+                                        </button>
+                                    </a>    
+                                </div>    
+                            </div> 
+
+                        </div>
+                        <div class="clearfix"></div>
+                        <div  class="col-md-12 padding0 top30" infinite-scroll='vehicle.nextPageForVehicles()' infinite-scroll-distance="3">
+                            <table id="vehicleTable" class="standard-table table-striped jobTable">
+                                <thead>
+                                    <tr>
+                                        <th class="dropdown" >
+                                            <span>
+                                                Vehicle Reg
+                                            </span>
+                                            <span class="pull-right">
+                                                <span>
+                                                    <span id="VehicleRegId" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': vehicle.vehicleFilters.vehicleReg !== undefined && vehicle.vehicleFilters.vehicleReg !== ''}" tooltip="Filter by Vehicle registration" tooltip-position="top"  ng-click="vehicle.setflag()"></span>
+                                                    <ul class="dropdown-menu filter-dropdown" role="menu" tpc-dropdown >
+                                                        <li role="presentation">
+                                                            <input type="text" closeenter="vehicleRegClass" flag="vehicle.setFocus" id="vehicleRegFilter" placeholder="Vehicle Reg" name="licenceClassFilter" class="form-control" ng-model='vehicle.vehicleFilters.vehicleReg' ng-model-options="{debounce: {'default': 500}}" ng-change="vehicle.filterVehicles()" />
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </span>
+                                        </th>
+                                        <th id="vehicleSizeHeader" class="dropdown" >
+                                            <span>
+                                                Vehicle Size
+                                            </span>
+                                            <span class="pull-right">
+                                                <span>
+                                                    <span id="VehicleSize" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': vehicle.vehicleFilters.vehicleSize !== undefined && vehicle.vehicleFilters.vehicleSize !== ''}" tooltip="Filter by Vehicle size" tooltip-position="top"  ng-click="vehicle.setflag()"></span>
+                                                    <ul class="dropdown-menu filter-dropdown" role="menu" tpc-dropdown >
+                                                        <li role="presentation">
+                                                            <input type="text" closeenter="VehicleSize" flag="vehicle.setFocus" id="VehicleSize" placeholder="Vehicle Size" name="VehicleSize" class="form-control" ng-model='vehicle.vehicleFilters.vehicleSize' ng-model-options="{debounce: {'default': 500}}" ng-change="vehicle.filterVehicles()" />
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </span>
+                                        </th>
+                                        <th class="dropdown" >
+                                            <span>
+                                                Vehicle Type
+                                            </span>
+                                            <span class="pull-right">
+                                                <span>
+                                                    <span id="VehicleType" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': vehicle.vehicleFilters.vehicleType !== undefined && vehicle.vehicleFilters.vehicleType !== ''}" tooltip="Filter by Vehicle type" tooltip-position="top"  ng-click="vehicle.setflag()"></span>
+                                                    <ul class="dropdown-menu filter-dropdown" role="menu" tpc-dropdown >
+                                                        <li role="presentation">
+                                                            <input type="text" closeenter="VehicleType" flag="vehicle.setFocus" id="VehicleType" placeholder="Vehicle Type" name="VehicleType" class="form-control" ng-model='vehicle.vehicleFilters.vehicleType' ng-model-options="{debounce: {'default': 500}}" ng-change="vehicle.filterVehicles()" />
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </span>
+                                        </th>
+
+                                        <th id="carryingCapacityHeader">Carrying Capacity</th>
+                                        <th id="palletCapacityHeader">Pallet Capacity</th>
+                                        <th id="tailLiftHeader">Tail Lift</th>
+                                        <th id="internalHeightHeader">Internal Height</th>   
+                                        <th id="internalLengthHeader">Internal Length</th>   
+                                        <th id="vehicleHeightHeader">Vehicle Height</th>   
+                                        <th id="motDueHeader" ng-click = 'vehicle.setOrder("motDue")'>MOT Due</th>   
+                                        <th id="6weeklyCheckHeader" ng-click = 'vehicle.setOrder("sixWeeklyCheck")'>6 Weekly Check</th>   
+                                        <th id="tachoCheckDueHeader" ng-click = 'vehicle.setOrder("tachoCheckDue")'>Tacho Check Due</th>   
+                                        <th id="loler6MonthHeader" ng-click = 'vehicle.setOrder("loler6MonthCheck")'>LOLER 6 Month Check</th>   
+                                        <th id="loler12MonthHeader" ng-click = 'vehicle.setOrder("loler12MonthCheck")'>LOLER 12 Month Test</th>   
+                                        <th class="dropdown" >
+                                            <span>
+                                                Active
+                                            </span>
+                                            <span class="pull-right">
+                                                <span>
+                                                    <span id="activeId" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': vehicle.vehicleFilters.active != null && vehicle.vehicleFilters.active != ''}" tooltip="Filter by active" tooltip-position="top"  ng-click="vehicle.setflag()"></span>
+                                                    <ul class="dropdown-menu filter-dropdown" role="menu" tpc-dropdown >
+                                                        <li role="presentation">
+                                                            <select class="form-control chosen" id="activeFilter" name="activeFilter" ng-model="vehicle.vehicleFilters.active"  ng-options='option for option in vehicle.yesNoOptions' chosen-directive="job.statusList" ng-change="vehicle.filterVehicles()">
+                                                                <option value="">Select an option</option>
+                                                            </select>
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </span>
+                                        </th>
+                                        <th class="dropdown" >
+                                            <span>
+                                                Defect
+                                            </span>
+                                            <span class="pull-right">
+                                                <span>
+                                                    <span id="defectId" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': vehicle.vehicleFilters.defect != null && vehicle.vehicleFilters.defect != ''}" tooltip="Filter by defect" tooltip-position="top"  ng-click="vehicle.setflag()"></span>
+                                                    <ul class="dropdown-menu filter-dropdown" role="menu" tpc-dropdown >
+                                                        <li role="presentation">
+                                                            <select class="form-control chosen" id="defectFilter" name="defectFilter" ng-model="vehicle.vehicleFilters.defect"  ng-options='option for option in vehicle.yesNoOptions' chosen-directive="job.statusList" ng-change="vehicle.filterVehicles()">
+                                                                <option value="">Select an option</option>
+                                                            </select>
+                                                        </li>
+                                                    </ul>
+                                                </span>
+                                            </span>
+                                        </th>
+                                        <th id="trackerHeader">Tracker Number</th>   
+                                    </tr>
+                                </thead>
+                                <tbody ng-show="!vehicle.vehicleList || vehicle.vehicleList.length == 0">
+                                    <tr>
+                                        <td colspan="14">
+                                            No vehicle present.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody ng-show="vehicle.vehicleList">
+                                    <tr ng-repeat="vehicleObj in vehicle.vehicleList" ng-click="vehicle.viewVehicle(vehicleObj.id)" id="vehicleRow{{$index + 1}}">
+                                        <td>
+                                            <p id="tblVehicleReg{{$index + 1}}" ng-bind="vehicleObj.vehicleReg" class="tcp-word-wrapper"></p>
+                                        </td>
+                                        <td>
+                                            <p id="tblVehicleSize{{$index + 1}}" ng-bind="vehicleObj.vehicleSize" class="tcp-word-wrapper"></p>
+                                        </td>
+                                        <td>
+                                            <p id="tblVehicleType{{$index + 1}}" ng-bind="vehicleObj.vehicleType" class="tcp-word-wrapper"></p>
+                                        </td>
+                                        <td>
+                                            <p id="tblCarryingCapacity{{$index + 1}}" ng-bind="vehicleObj.carryingCapacity" class="tcp-word-wrapper"></p>
+                                        </td>
+                                        <td>
+                                            <p id="tblPalletCapacity{{$index + 1}}" ng-bind="vehicleObj.palletCapacity" class="tcp-word-wrapper"></p>
+                                        </td>
+                                        <td>
+                                            <p id="tblPalletCapacity{{$index + 1}}" ng-bind="vehicleObj.tailLift | true_false"></p>
+                                        </td>
+                                        <td>
+                                            <p id="tblInternalHeight{{$index + 1}}" ng-bind="vehicleObj.internalHeight" class="tcp-word-wrapper"></p>
+                                        </td>
+                                        <td>
+                                            <p id="tblInternalLength{{$index + 1}}" ng-bind="vehicleObj.internalLength" class="tcp-word-wrapper"></p>
+                                        </td>
+                                        <td>
+                                            <p id="tblVehicleHeight{{$index + 1}}" ng-bind="vehicleObj.vehicleHeight" class="tcp-word-wrapper"></p>
+                                        </td>
+                                        <td>
+                                            <p id="tblMotDue{{$index + 1}}" ng-bind="vehicleObj.motDue | date:angularDateFormat" class="tcp-word-wrapper"></p>
+                                        </td>
+                                        <td>
+                                            <p id="tblSixWeeklyCheck{{$index + 1}}" ng-bind="vehicleObj.sixWeeklyCheck | date:angularDateFormat" class="tcp-word-wrapper"></p>
+                                        </td>
+                                        <td>
+                                            <p id="tblTachoCheckDue{{$index + 1}}" ng-bind="vehicleObj.tachoCheckDue | date:angularDateFormat" class="tcp-word-wrapper"></p>
+                                        </td>
+                                        <td>
+                                            <p id="tblLoler6MonthCheckDue{{$index + 1}}" ng-bind="vehicleObj.loler6MonthCheck | date:angularDateFormat" class="tcp-word-wrapper"></p>
+                                        </td>
+                                        <td>
+                                            <p id="tblLoler12MonthCheckDue{{$index + 1}}" ng-bind="vehicleObj.loler12MonthCheck | date:angularDateFormat" class="tcp-word-wrapper"></p>
+                                        </td>
+                                        <td>
+                                            <p id="tblActiveDue{{$index + 1}}" ng-bind="vehicleObj.active | true_false"></p>
+                                        </td>
+                                        <td>
+                                            <p id="tblDefectDue{{$index + 1}}" ng-bind="vehicleObj.defect | true_false"></p>
+                                        </td>
+                                        <td>
+                                            <p id="tblTrackerDue{{$index + 1}}" ng-bind="vehicleObj.trackNumber" class="tcp-word-wrapper"></p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="col-md-12 padding0" ng-show="vehicle.vehicleList.length > 0 && vehicle.allVehiclesRetrieved">
+                                <div class="btn button color" id="noMoreVehiclesMessage" ng-click="vehicle.addModalPanel()">Add a new vehicle +</div>
+                            </div>
+                        </div>
+                    </div>    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="spacer"></div>
+<div modal-show class="modal fade" modal-visible="vehicle.addVehicleModalPanel" id="addVehicleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="" name="createVehicleForm" id="createVehicleForm" novalidate>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vehicle.hideCreateNewVehicle(createVehicleForm)"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="vehicleModalLabel" ng-if="!vehicle.editVehicleFlag">Add Vehicle</h4>
+                    <h4 class="modal-title" id="vehicleModalLabel" ng-if="vehicle.editVehicleFlag">Edit Vehicle</h4>
+                </div>
+                <div class="modal-body tcp-scrollable-modal"  style="overflow-y: {{vehicle.vehicleObject.temporary == true ? 'inherit' : 'auto'}}">
+                    <div class="row">
+                        <div class="col-sm-6 p10">
+                        </div> 
+                        <div class="col-sm-6 p10">
+                            <div class="col-sm-5 pull-right">
+                                <input type="checkbox" id="vehicleTemporarycheckbox" ng-model="vehicle.vehicleObject.temporary" 
+                                       ng-change="vehicle.checkTemporary(vehicle.vehicleObject.temporary)" style="height: 15px;width: 15px">
+                                <span style="cursor: default" ng-click="vehicle.temporaryVehicleCheck(vehicle.vehicleObject.temporary)">Temporary Vehicle</span>
+                            </div>
+
+                        </div> 
+                    </div>
+                    <div class="col-sm-6 p10" ng-if="vehicle.vehicleObject.temporary != true">
+                        <div class="col-sm-4" >
+                            <label for="artic" class="tcp-modal-label">
+                                Artic <span class="icon-asterisk icon-required"></span>
+                            </label>
+                        </div>
+                        <div class="col-sm-8 padding-left">                   
+                            <select ng-disabled="vehicle.editVehicleFlag" class="form-control chosen" id="artic" name="artic" ng-model="vehicle.vehicleObject.artic"  ng-options='artic for artic in vehicle.articOptions' chosen-directive="vehicle.articOptions" ng-change="vehicle.articChanged(vehicle.vehicleObject.artic)">
+                            </select>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="col-sm-6 p10">
+                        <div class="col-sm-4">
+                            <label for="vehicleReg" class="tcp-modal-label">
+                                <span  ng-if='vehicle.vehicleObject.artic == "Rigid" || vehicle.vehicleObject.artic == "Unit"'>Vehicle Reg </span>
+                                <span  ng-if='vehicle.vehicleObject.artic == "Trailer"'>Reference</span>
+                                <span class="icon-asterisk icon-required"></span>
+                            </label>
+                        </div>
+                        <div class="col-sm-8 padding-left">                   
+                            <input type="text" class="form-control" id="vehicleReg" name="vehicleReg" ng-model="vehicle.vehicleObject.vehicleReg" required maxlength="50">
+                            <div class="error help-block" ng-show="createVehicleForm.vehicleReg.$invalid && vehicle.vehicleSubmitted">
+                                <span ng-if='vehicle.vehicleObject.artic == "Rigid" || vehicle.vehicleObject.artic == "Unit"' class="red">Enter Vehicle Registration</span>
+                                <span  ng-if='vehicle.vehicleObject.artic == "Trailer"' class="red">Enter Reference</span>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="col-sm-6 p10" ng-if="vehicle.vehicleObject.temporary == true">
+                        <div class="col-sm-4">
+                            <label for="active" class="tcp-modal-label">
+                                Active<span class="icon-asterisk icon-required"></span>
+                            </label>
+                        </div>
+                        <div class="col-sm-8 padding-left">
+                            <input type="radio" id="yesRadio" name="active" ng-model="vehicle.vehicleObject.active" ng-value="true" class="radio-button col-sm-1" required/>
+                            <div class="col-sm-3">
+                                Yes
+                            </div>
+                            <input type="radio" class="radio-button col-sm-1" id="noRadioActive" ng-model="vehicle.vehicleObject.active" ng-value="false" required/>
+                            <div class="col-sm-7">
+                                No
+                            </div>
+                            <div class="error help-block" ng-show="createVehicleForm.active.$invalid && vehicle.vehicleSubmitted">
+                                <span class="red">Select Active</span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="clearfix" ></div>
+                    <div class="col-sm-6 p10" ng-if='vehicle.vehicleObject.artic == "Rigid" || vehicle.vehicleObject.artic == "Unit"'>
+                        <div class="col-sm-4">
+                            <label for="vehicleSize" class="tcp-modal-label">
+                                Vehicle Size <span class="icon-asterisk icon-required"></span>
+                            </label>
+                        </div>
+                        <div class="col-sm-8 padding-left">  
+                            <div id="vehicleSizeBlock">
+                                <input type="text" ng-model="vehicle.vehicleObject.vehicleSize" uib-typeahead="vehicleSize for vehicleSize in vehicle.vehicleSize | filter:$viewValue | limitTo:25" class="form-control" typeahead-show-hint="true" typeahead-min-length="0" name="vehicleSize"  required autocomplete="off">
+                                <i class="fa fa-caret-down inner-addon"></i>
+                            </div>
+
+                            <div class="error help-block" ng-show="createVehicleForm.vehicleSize.$invalid && vehicle.vehicleSubmitted">
+                                <span class="red">Enter Vehicle Size</span>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div> 
+
+                    <div class="col-sm-6 p10">
+                        <div class="col-sm-4">
+                            <label for="vehicleType" class="tcp-modal-label">
+                                Vehicle Type <span class="icon-asterisk icon-required"></span>
+                            </label>
+                        </div>
+                        <div class="col-sm-8 padding-left">   
+                            <div id="vehicleTypeBlock">
+                                <input type="text" ng-model="vehicle.vehicleObject.vehicleType" uib-typeahead="vehicleType for vehicleType in vehicle.vehicleTypes | filter:$viewValue | limitTo:25" class="form-control" typeahead-show-hint="true" typeahead-min-length="0" name="vehicleType"  required autocomplete="off">
+                                <i class="fa fa-caret-down inner-addon"></i>
+                            </div>
+                            <div class="error help-block" ng-show="createVehicleForm.vehicleType.$invalid && vehicle.vehicleSubmitted">
+                                <span class="red">Enter Vehicle Type</span>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="clearfix" ng-if='vehicle.vehicleObject.artic != "Trailer"'></div>
+                    <div class="col-sm-6 p10"  ng-if="vehicle.vehicleObject.temporary != true">
+                        <div class="col-sm-4">
+                            <label for="carryingCapacity" class="tcp-modal-label">
+                                Carrying Capacity <span class="icon-asterisk icon-required"></span>
+                            </label>
+                        </div>
+                        <div class="col-sm-8 padding-left">
+                            <div class="input-group">
+                                <input type="text" id="carryingCapacity" ng-model="vehicle.vehicleObject.carryingCapacity" name="carryingCapacity" class="form-control" numbers-only decimalallowed="true" decimallimit="2" maxlength="10" required/>
+                                <span class="input-group-addon">kg</span>
+                            </div>
+                            <div class="error help-block" ng-show="createVehicleForm.carryingCapacity.$invalid && vehicle.vehicleSubmitted">
+                                <span class="red">Enter Carrying Capacity</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 p10" ng-if='vehicle.vehicleObject.artic != "Unit" && vehicle.vehicleObject.temporary != true'>
+                        <div class="col-sm-4">
+                            <label for="palletCapacity" class="tcp-modal-label">
+                                Pallet Capacity <span class="icon-asterisk icon-required"></span>
+                            </label>
+                        </div>
+                        <div class="col-sm-8 padding-left">                   
+                            <input type="text" class="form-control" id="palletCapacity" name="palletCapacity" ng-model="vehicle.vehicleObject.palletCapacity" required numbers-only maxlength="10">
+                            <div class="error help-block" ng-show="createVehicleForm.palletCapacity.$invalid && vehicle.vehicleSubmitted">
+                                <span class="red">Enter Pallet Capacity</span>
+                            </div>
+                        </div>
+
+                    </div> 
+                    <div class="clearfix" ng-if='vehicle.vehicleObject.artic != "Unit" && vehicle.vehicleObject.artic != "Trailer"'></div>
+                    <div class="col-sm-6 p10" ng-if="vehicle.vehicleObject.temporary == true">
+                        <div class="col-sm-4">
+                            <label for='agency' class="tcp-modal-label">Agency Company<span class="icon-asterisk icon-required"></span></label>
+                        </div>
+                        <div class="col-sm-8 padding-left">   
+                            <input type="text" ng-model="vehicle.vehicleObject.agency" uib-typeahead="agency for agency in vehicle.agencyList | filter:$viewValue | limitTo:20" class="form-control" typeahead-show-hint="true" typeahead-min-length="0" name="agency" style="padding: 9px 9px" required autocomplete="on">
+                            <div class="error help-block" ng-show="createVehicleForm.agency.$invalid && vehicle.vehicleSubmitted">
+                                <span class="red">Enter Agency Company</span>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-sm-6 p10">
+                        <div class="col-sm-4">
+                            <label for="tailLift" class="tcp-modal-label">
+                                Tail Lift <span class="icon-asterisk icon-required"></span>
+                            </label>
+                        </div>
+                        <div class="col-sm-8 padding-left"> 
+                            <input type="radio" id="yesRadio" name="tailLift" ng-model="vehicle.vehicleObject.tailLift" ng-value="true" class="radio-button col-sm-1" required ng-change="vehicle.changeTailLift()"/>
+                            <div class="col-sm-3">
+                                Yes
+                            </div>
+                            <input type="radio" class="radio-button col-sm-1" id="noRadioTailLift" ng-model="vehicle.vehicleObject.tailLift" ng-value="false" required ng-change="vehicle.changeTailLift()"/>
+                            <div class="col-sm-7">
+                                No
+                            </div>
+                            <div class="error help-block" ng-show="createVehicleForm.tailLift.$invalid && vehicle.vehicleSubmitted">
+                                <span class="red">Select Tail Lift</span>
+                            </div>
+                        </div>
+
+                    </div> 
+                    <div class="clearfix" ng-if='(vehicle.vehicleObject.artic == "Unit" || vehicle.vehicleObject.artic == "Trailer") && vehicle.vehicleObject.temporary != true'></div>
+                    <div class="col-sm-6 p10" ng-if="vehicle.vehicleObject.temporary != true">
+                        <div class="col-sm-4">
+                            <label for="vehicleHeight" class="tcp-modal-label">
+                                Vehicle Height <span class="icon-asterisk icon-required"></span>
+                            </label>
+                        </div>
+                        <div class="col-sm-8 padding-left">
+                            <div class="input-group">
+                                <input type="text" id="vehicleHeight" ng-model="vehicle.vehicleObject.vehicleHeight" name="vehicleHeight" class="form-control" numbers-only decimalallowed="true" decimallimit="2" maxlength="20" required/>
+                                <span class="input-group-addon">m</span>
+                            </div>
+                            <div class="error help-block" ng-show="createVehicleForm.vehicleHeight.$invalid && vehicle.vehicleSubmitted">
+                                <span class="red">Enter Vehicle Height </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p10" ng-if='(vehicle.vehicleObject.artic == "Rigid" || vehicle.vehicleObject.artic == "Trailer") && vehicle.vehicleObject.temporary != true'>
+                        <div class="col-sm-4">
+                            <label for="internalHeight" class="tcp-modal-label">
+                                Internal Height <span class="icon-asterisk icon-required"></span>
+                            </label>
+                        </div>
+                        <div class="col-sm-8 padding-left">
+                            <div class="input-group">
+                                <input type="text" id="internalHeight" ng-model="vehicle.vehicleObject.internalHeight" name="internalHeight " class="form-control" numbers-only decimalallowed="true" decimallimit="2" maxlength="20" required/>
+                                <span class="input-group-addon">m</span>
+                            </div>
+                            <div class="error help-block" ng-show="createVehicleForm.internalHeight.$invalid && vehicle.vehicleSubmitted">
+                                <span class="red">Enter Internal Height </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p10" ng-if='(vehicle.vehicleObject.artic == "Rigid" || vehicle.vehicleObject.artic == "Trailer") && vehicle.vehicleObject.temporary != true'>
+                        <div class="col-sm-4">
+                            <label for="internalLength" class="tcp-modal-label">
+                                Internal Length <span class="icon-asterisk icon-required"></span>
+                            </label>
+                        </div>
+                        <div class="col-sm-8 padding-left">
+                            <div class="input-group">
+                                <input type="text" id="internalLength" ng-model="vehicle.vehicleObject.internalLength" name="internalLength " class="form-control" numbers-only decimalallowed="true" decimallimit="2" maxlength="20" required/>
+                                <span class="input-group-addon">m</span>
+                            </div>
+                            <div class="error help-block" ng-show="createVehicleForm.internalLength.$invalid && vehicle.vehicleSubmitted">
+                                <span class="red">Enter Internal Length </span>
+                            </div>
+                        </div>
+                    </div> 
+
+
+                    <div class="col-sm-6 p10" ng-if="vehicle.vehicleObject.temporary != true">
+                        <div class="col-sm-4">
+                            <label for="motDue" class="tcp-modal-label">
+                                MOT Due <span class="icon-asterisk icon-required"></span>
+                            </label>
+                        </div>
+                        <div class="col-sm-8 padding-left">   
+                            <div class="input-group amp-date">
+                                <input type="text" class="form-control" datetime-picker="dd/MM/yyyy" id="motDue" name="motDue" ng-model="vehicle.vehicleObject.motDue" is-open="vehicle.open.motDue" required enable-time="false" show-weeks="false" ng-change="vehicle.closeCalendar($event, 'motDue')" ng-click="vehicle.openCalendar($event, 'motDue')" datepicker-append-to-body='true'/>
+                                <label for="motDue" class="input-group-addon" ng-click="vehicle.openCalendar($event, 'motDue')"><i class="fa fa-calendar"></i></label>
+                            </div>
+                            <div class="error help-block" ng-show="createVehicleForm.motDue.$invalid && vehicle.vehicleSubmitted">
+                                <span class="red">Enter MOT Due</span>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-sm-6 p10" ng-if='(vehicle.vehicleObject.artic == "Rigid" || vehicle.vehicleObject.artic == "Unit") && vehicle.vehicleObject.temporary != true'>
+                        <div class="col-sm-4">
+                            <label for="sixWeeklyCheck" class="tcp-modal-label">
+                                6 Weekly Check <span class="icon-asterisk icon-required"></span>
+                            </label>
+                        </div>
+                        <div class="col-sm-8 padding-left">   
+                            <div class="input-group amp-date">
+                                <input type="text" class="form-control" datetime-picker="dd/MM/yyyy" id="sixWeeklyCheck" name="sixWeeklyCheck" ng-model="vehicle.vehicleObject.sixWeeklyCheck" is-open="vehicle.open.sixWeeklyCheck" required enable-time="false" show-weeks="false" ng-click="vehicle.openCalendar($event, 'sixWeeklyCheck')" ng-change="vehicle.closeCalendar($event, 'sixWeeklyCheck')" datepicker-append-to-body='true'/>
+                                <label for="sixWeeklyCheck" class="input-group-addon" ng-click="vehicle.openCalendar($event, 'sixWeeklyCheck')"><i class="fa fa-calendar"></i></label>
+                            </div>
+                            <div class="error help-block" ng-show="createVehicleForm.sixWeeklyCheck.$invalid && vehicle.vehicleSubmitted">
+                                <span class="red">Enter 6 Weekly Check</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p10" ng-if="vehicle.vehicleObject.temporary != true">
+                        <div class="col-sm-4">
+                            <label for="sixWeeklyCheck" class="tcp-modal-label">
+                                12 Weekly Check <span class="icon-asterisk icon-required"></span>
+                            </label>
+                        </div>
+                        <div class="col-sm-8 padding-left">   
+                            <div class="input-group amp-date">
+                                <input type="text" class="form-control" datetime-picker="dd/MM/yyyy" id="twelveWeeklyCheck" name="twelveWeeklyCheck" ng-model="vehicle.vehicleObject.twelveWeeklyCheck" is-open="vehicle.open.twelveWeeklyCheck" required enable-time="false" show-weeks="false" ng-click="vehicle.openCalendar($event, 'twelveWeeklyCheck')" ng-change="vehicle.closeCalendar($event, 'twelveWeeklyCheck')" datepicker-append-to-body='true'/>
+                                <label for="twelveWeeklyCheck" class="input-group-addon" ng-click="vehicle.openCalendar($event, 'twelveWeeklyCheck')"><i class="fa fa-calendar"></i></label>
+                            </div>
+                            <div class="error help-block" ng-show="createVehicleForm.twelveWeeklyCheck.$invalid && vehicle.vehicleSubmitted">
+                                <span class="red">Enter 12 Weekly Check</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div  ng-if="(!!vehicle.vehicleObject.tailLift && (vehicle.vehicleObject.artic == 'Rigid' || vehicle.vehicleObject.artic == 'Trailer')) && vehicle.vehicleObject.temporary != true">
+                        <div class="col-sm-6 p10">
+                            <div class="col-sm-4">
+                                <label id="loler6MonthCheckLabel" for="loler6MonthCheck" class="tcp-modal-label">
+                                    LOLER 6 Month Check <span class="icon-asterisk icon-required"></span>
+                                </label>
+                            </div>
+                            <div class="col-sm-8 padding-left">   
+                                <div class="input-group amp-date">
+                                    <input type="text" class="form-control" datetime-picker="dd/MM/yyyy" id="loler6MonthCheck" name="loler6MonthCheck" ng-model="vehicle.vehicleObject.loler6MonthCheck" is-open="vehicle.open.loler6MonthCheck" required enable-time="false" show-weeks="false" ng-change="vehicle.closeCalendar($event, 'loler6MonthCheck')" ng-click="vehicle.openCalendar($event, 'loler6MonthCheck')" datepicker-append-to-body='true'/>
+                                    <label for="loler6MonthCheck" class="input-group-addon" ng-click="vehicle.openCalendar($event, 'loler6MonthCheck')"><i class="fa fa-calendar"></i></label>
+                                </div>
+                                <div class="error help-block" ng-show="createVehicleForm.loler6MonthCheck.$invalid && vehicle.vehicleSubmitted">
+                                    <span class="red">Enter LOLER 6 Month Check</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 p10">
+                            <div class="col-sm-4">
+                                <label id="loler12MonthCheckLabel" for="tachoCheckDue" class="tcp-modal-label">
+                                    LOLER 12 Month<br/> Test<span class="icon-asterisk icon-required"></span>
+                                </label>
+                            </div>
+                            <div class="col-sm-8 padding-left">   
+                                <div class="input-group amp-date">
+                                    <input type="text" class="form-control" datetime-picker="dd/MM/yyyy" id="loler12MonthCheck" name="loler12MonthCheck" ng-model="vehicle.vehicleObject.loler12MonthCheck" is-open="vehicle.open.loler12MonthCheck" required enable-time="false" show-weeks="false" ng-change="vehicle.closeCalendar($event, 'loler12MonthCheck')" ng-click="vehicle.openCalendar($event, 'loler12MonthCheck')" datepicker-append-to-body='true'/>
+                                    <label for="loler12MonthCheck" class="input-group-addon" ng-click="vehicle.openCalendar($event, 'loler12MonthCheck')"><i class="fa fa-calendar"></i></label>
+                                </div>
+                                <div class="error help-block" ng-show="createVehicleForm.loler12MonthCheck.$invalid && vehicle.vehicleSubmitted">
+                                    <span class="red">Enter LOLER 12 Month Test</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 p10" ng-if="vehicle.vehicleObject.temporary != true">
+                        <div class="col-sm-4">
+                            <label for="active" class="tcp-modal-label">
+                                Active<span class="icon-asterisk icon-required"></span>
+                            </label>
+                        </div>
+                        <div class="col-sm-8 padding-left">
+                            <input type="radio" id="yesRadio" name="active" ng-model="vehicle.vehicleObject.active" ng-value="true" class="radio-button col-sm-1" required/>
+                            <div class="col-sm-3">
+                                Yes
+                            </div>
+                            <input type="radio" class="radio-button col-sm-1" id="noRadioActive" ng-model="vehicle.vehicleObject.active" ng-value="false" required/>
+                            <div class="col-sm-7">
+                                No
+                            </div>
+                            <div class="error help-block" ng-show="createVehicleForm.active.$invalid && vehicle.vehicleSubmitted">
+                                <span class="red">Select Active</span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="clearfix" ng-if='(vehicle.vehicleObject.artic == "Rigid") && vehicle.vehicleObject.temporary != true'></div>
+                    <div class="col-sm-6 p10" ng-if='(vehicle.vehicleObject.artic == "Rigid" || vehicle.vehicleObject.artic == "Unit") && vehicle.vehicleObject.temporary != true'>
+                        <div class="col-sm-4">
+                            <label for="defect" class="tcp-modal-label">
+                                Defect<span class="icon-asterisk icon-required"></span>
+                            </label>
+                        </div>
+                        <div class="col-sm-8 padding-left">
+                            <input type="radio" id="yesRadio" name="defect" ng-model="vehicle.vehicleObject.defect" ng-value="true" class="radio-button col-sm-1" required/>
+                            <div class="col-sm-3">
+                                Yes
+                            </div>
+                            <input type="radio" class="radio-button col-sm-1" id="noRadioDefect" ng-model="vehicle.vehicleObject.defect" ng-value="false" required/>
+                            <div class="col-sm-7">
+                                No
+                            </div>
+                            <div class="error help-block" ng-show="createVehicleForm.defect.$invalid && vehicle.vehicleSubmitted">
+                                <span class="red">Select Defect</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-sm-6 p10" ng-if='(vehicle.vehicleObject.artic == "Rigid" || vehicle.vehicleObject.artic == "Unit") && vehicle.vehicleObject.temporary != true'>
+                        <div class="col-sm-4">
+                            <label for="tachoCheckDue" class="tcp-modal-label">
+                                Tacho Check Due <span class="icon-asterisk icon-required"></span>
+                            </label>
+                        </div>
+                        <div class="col-sm-8 padding-left">   
+                            <div class="input-group amp-date">
+                                <input type="text" class="form-control" datetime-picker="dd/MM/yyyy" id="tachoCheckDue" name="tachoCheckDue" ng-model="vehicle.vehicleObject.tachoCheckDue" is-open="vehicle.open.tachoCheckDue" required enable-time="false" show-weeks="false" ng-change="vehicle.closeCalendar($event, 'tachoCheckDue')" ng-click="vehicle.openCalendar($event, 'tachoCheckDue')" datepicker-append-to-body='true'/>
+                                <label for="tachoCheckDue" class="input-group-addon" ng-click="vehicle.openCalendar($event, 'tachoCheckDue')"><i class="fa fa-calendar"></i></label>
+                            </div>
+                            <div class="error help-block" ng-show="createVehicleForm.tachoCheckDue.$invalid && vehicle.vehicleSubmitted">
+                                <span class="red">Enter Tacho Check Due</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p10" ng-if='(vehicle.vehicleObject.artic == "Rigid" || vehicle.vehicleObject.artic == "Unit") && vehicle.vehicleObject.temporary != true'>
+                        <div class="col-sm-4">
+                            <label for="defect" class="tcp-modal-label">
+                                Tracker Number<span class="icon-asterisk icon-required"></span>
+                            </label>
+                        </div>
+                        <div class="col-sm-8 padding-left">                   
+                            <input type="text" id="trackNumber" ng-model="vehicle.vehicleObject.trackNumber" name="trackNumber" class="form-control" numbers-only maxlength="20" required/>
+                            <div class="error help-block" ng-show="createVehicleForm.trackNumber.$invalid && vehicle.vehicleSubmitted">
+                                <span class="red">Enter Tracker Number</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="clearfix"></div>
+                <div class="modal-footer">
+                    <div class="btn-group overflow">
+                        <button ng-disabled="vehicle.saveDisabled" type="button" class="btn btnSave1" id="btnSaveVehicleYes"  ng-click="vehicle.saveVehicle(vehicle.vehicleObject, createVehicleForm)">Save</button>
+                        <button ng-disabled="vehicle.saveDisabled" type="button" class="btn btn-primary dropdown-toggle btnIconSave" aria-expanded="false" ng-click="vehicle.saveVehicle(vehicle.vehicleObject, createVehicleForm)">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                    </div>
+                    <div class="btn-group overflow">
+                        <button type="button" class="btn btnCancel1" id="btnSaveVehicleNo" ng-click="vehicle.hideCreateNewVehicle(createVehicleForm)">Cancel</button>
+                        <button type="button" class="btn btn-primary dropdown-toggle btnRed" aria-expanded="false" ng-click="vehicle.hideCreateNewVehicle(createVehicleForm)">
+                            <i class="fa fa-close"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

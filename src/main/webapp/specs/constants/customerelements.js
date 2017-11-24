@@ -1,0 +1,27 @@
+var customerElements = function () {
+    this.txtSearchCustomer=element(by.id('searchCustomers'));
+    this.repeaterCustomerList='customer in customers.customerList';
+    this.columnCustomerSize='salesContact';
+    this.columnCustomerName='customerName';
+    this.btnNewCustomer = element(by.id("btn-top-search"));
+    this.btnSaveCustomer = element(by.id("btnSaveService"));
+    this.btnCancelCustomer = element(by.id("btnCloseService"));
+    this.textCustomerName = element(by.id("customerName"));
+    this.textSalesContact = element(by.id("salesContact"));
+    this.textGenericEmail = element(by.id("genericEmail"));
+    this.textAccountContact = element(by.id("accountContact"));
+    this.textSalesEmail = element(by.id("salesEmail"));
+    this.textAddress = element(by.id("address"));
+    this.textCityTown = element(by.id("cityTown"));
+    this.textCounty = element(by.id("county"));
+    this.textPostCode = element(by.id("postCode"));
+    this.textPhoneNumber = element(by.id("phoneNumber"));
+    this.textFax = element(by.id("fax"));
+    this.textVatNo = element(by.id("vatNo"));
+    this.textCompanyNumber = element(by.id("companyNumber"));
+    this.textCreditCheckYesRadio = element(by.id("creditCheckYesRadio"));
+    this.textCreditLimit = element(by.id("creditLimit"));
+    this.textOnlineBookingYesRadio = element(by.id("onlineBookingYesRadio"));
+    this.tblCustomerRow = element(by.id("customerRow1"));
+};
+module.exports = new customerElements();

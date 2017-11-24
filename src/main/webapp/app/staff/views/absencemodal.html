@@ -1,0 +1,45 @@
+<div id="downloadManifestModal" >
+    <div>
+        <form name="absentForm" id="manifestForm" novalidate>
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close"><span aria-hidden="true" ng-click='absence.hideAbsenceModal()'>&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">
+                    <span id="downloadManifestModalTitle">Record Absent</span>
+                </h4>
+            </div>
+            <div class="modal-body tcp-scrollable-modal" style='overflow-y: inherit'>
+                <div class='row'>
+                    <div class='col-sm-8'></div>
+
+                </div>
+                <div class="row">
+
+
+                    <div class="col-sm-8">
+                        <uib-datepicker class='pull-right' ng-model='absence.activeDate' multi-select='absence.selectedDates' select-range="false" datepicker-append-to-body='true' show-weeks="false"></uib-datepicker>
+                    </div>
+                    <div class='col-sm-4'><i class='fa fa-square' style='color: #31b0d5;font-size: 26px;'></i>
+                        <span style='vertical-align: top' class='tcp-modal-label'> - Absent</span>
+                    </div>
+
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="btn-group overflow">
+                    <button class="btn btnSave1" id="btnSaveAbsence" type="button" ng-click="absence.saveHolidays()">Save</button>
+                    <button class="btn btn-primary btnIconSave" type="button" aria-expanded="false" ng-click="absence.saveHolidays()">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                </div>
+                <div class="btn-group overflow">
+                    <button type="button" class="btn btnCancel1" id="btnCancelAbsence" ng-click="absence.hideAbsenceModal()">Cancel</button>
+                    <button  type="button" class="btn btn-primary dropdown-toggle btnRed" aria-expanded="false" ng-click="absence.hideAbsenceModal()">
+                        <i class="fa fa-close"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

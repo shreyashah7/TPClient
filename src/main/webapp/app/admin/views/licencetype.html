@@ -1,0 +1,90 @@
+<div class="main_section">
+    <div class="main-bg-img-orders"></div>
+    <div class="container-fluid main-bg-image ">
+        <div class="container">
+            <div class="row table_sections">
+                <div class="table_section">
+                    <div class="row">
+                        <div class="btn_group_bar overflow bg-black padding20">
+                            <div class="col-md-6 padding0">
+                                <span id="titleSubHeader" class="customer_id new_content_header white">Licence Types</span>
+                            </div>
+                            <div class="col-md-6 padding0">
+                                <span class="pull-right">
+                                    <a class="tooltips" ng-click="licenceType.addNewRow(licenceTypeForm)" ng-scroll="licenceTypeTable" scroll-flag="licenceType.scrollFlag"  title="Add new Licence Type" tooltip-position="top" >
+                                        <i class="fa fa-plus-square text-green"></i>
+                                    </a>
+                                    <a class="text-green" ng-click="licenceType.addNewRow(licenceTypeForm)" ng-scroll="licenceTypeTable" scroll-flag="licenceType.scrollFlag"  title="Add new Licence Type" tooltip-position="top" id="addNewLicenceTypeLink">Add Licence Type</a>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <div class="btn-group overflow">
+                                        <button  class="btn btnSave1" id="btnSave" ng-click="licenceType.saveLicenceTypes(licenceTypeForm)" ng-disabled="licenceType.saveDisabled">Save</button>
+                                        <button type="button" class="btn btn-primary dropdown-toggle btnIconSave" aria-expanded="false" ng-click="licenceType.saveLicenceTypes(licenceTypeForm)" ng-disabled="licenceType.saveDisabled">
+                                            <i class="fa fa-floppy-o"></i>
+                                        </button>
+                                    </div>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>   
+                <div class="row top30">
+                    <div class="panel">
+                        <div infinite-scroll='licenceType.nextPage()' infinite-scroll-distance="2" class="col-md-12 overflow-visible padding0 table-responsive">
+                            <form name="licenceTypeForm">
+                                <table id="licenceTypeTable" class="new-order-table white-bg-table" style='table-layout: fixed'>
+                                    <thead>
+                                        <tr>
+                                            <th class="col-md-6"><span class="icon-asterisk icon-required"></span>Licence Type</th>
+                                            <th class="col-md-6"><span class="icon-asterisk icon-required"></span>Vehicle Size</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="licence in licenceType.licenceTypeList" ng-form="licenceTypeRowForm" >
+                                            <td class="text-left">
+
+                                                <div id="licenceClass{{$index + 1}}Input" ng-class="{'has-error':licenceTypeRowForm.licenceClass.$invalid && licenceType.licenceFormSubmitted}">
+                                                    <div class="chosen-container chosen-container-single"  title="" id="licenceClass{{$index + 1}}_chosen" ng-click="licence.openDropdown = true" ng-if="!licence.openDropdown && licence.id">
+                                                        <a class="chosen-single" tabindex="-1">
+                                                            <span>{{licence.licenceClass}}</span><div><b></b></div>
+                                                        </a>
+                                                    </div>
+                                                    <select class="chosen" style="word-break: break-all" name="licenceClass" id="licenceClass{{$index + 1}}" ng-model="licence.licenceClass" ng-options="class as class for class in licenceType.classList" chosen-directive="licenceType.classList" required ng-change="licence.dirty = true;licence.duplicateRecord=false;" ng-if="licence.openDropdown || !licence.id" chosen-open="licence.openDropdown">
+                                                        <option value="">Please Select...</option>
+                                                    </select>
+                                                    <div class="error help-block" ng-show="(licenceTypeRowForm.licenceClass.$invalid && licenceType.licenceFormSubmitted) && (licenceTypeRowForm.licenceClass.$dirty || licenceType.licenceFormSubmitted)">
+                                                        <span class="red error-font">Select licence class</span>
+                                                    </div>
+                                                    <div class="error help-block" ng-show="licence.duplicateRecord">
+                                                        <span class="red error-font">Duplicate entry for this combination</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-left">
+
+                                                <div id="vehicleSize{{$index + 1}}Input" ng-class="{'has-error':licenceTypeRowForm.vehicleSize.$invalid && licenceType.licenceFormSubmitted}">
+                                                    <div class="chosen-container chosen-container-single"  title="" id="vehicleSize{{$index + 1}}_chosen" ng-click="licence.openDropdown1 = true;licence.duplicateRecord=false;" ng-if="!licence.openDropdown1 && licence.id">
+                                                        <a class="chosen-single" tabindex="-1">
+                                                            <span>{{licence.vehicleSize}}</span><div><b></b></div>
+                                                        </a>
+                                                    </div>
+                                                    <select class="chosen" name="vehicleSize" id="vehicleSize{{$index + 1}}" ng-model="licence.vehicleSize" ng-options="vehicleSize as vehicleSize for vehicleSize in licenceType.vehicleSizeList" chosen-directive="licenceType.vehicleSizeList" required ng-change="licence.dirty = true;" ng-if="licence.openDropdown1 || !licence.id" chosen-open="licence.openDropdown1">
+                                                        <option value="">Please Select...</option>
+                                                    </select>
+                                                    <div class="error help-block" ng-show="(licenceTypeRowForm.vehicleSize.$invalid && licenceType.licenceFormSubmitted) && (licenceTypeRowForm.vehicleSize.$dirty || licenceType.licenceFormSubmitted)">
+                                                        <span class="red error-font">Select vehicle type</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

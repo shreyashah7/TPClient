@@ -1,0 +1,37 @@
+{
+  "name": "tpclient",
+  "description": "Traffic Program Client",
+  "main": "index.html",
+  "authors": [
+    "Tom Haworth"
+  ],
+  "license": "MIT",
+  "moduleType": [
+    "amd",
+    "es6",
+    "globals",
+    "node",
+    "yui"
+  ],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "2.2.0",
+    "angular": "1.4.8",
+    "angular-route": "1.4.8",
+    "angular-resource": "1.4.8",
+    "bootstrap": "3.3.1",
+    "angular-bootstrap": "1.1.0",
+    "jquery-ui": "1.11.4",
+    "ngInfiniteScroll": "1.2.1",
+    "bootstrap-ui-datetime-picker": "2.2.0",
+    "chosen": "1.4.2",
+    "gm.datepickerMultiSelect": "gm.datepicker-multi-select#1.0.10"
+  }
+}

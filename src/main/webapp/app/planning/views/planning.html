@@ -1,0 +1,499 @@
+<div class="main_section">
+    <img src="images/12.jpg" id="bg-img-scroll" />
+    <div class="main-bg-img-orders"></div>
+    <div class="container-fluid main-bg-image ">
+        <div class="container" >
+            <div class="row table_sections">
+                <div class="table_section">
+                    <div class="col-md-12 bg-black subheadwm">
+                        <div class="btn_group_bar">
+                            <div class="col-md-12 padding0">
+                                <div class="col-md-4 padding0">
+                                    <span ng-if="planning.planningView" id="titleSubHeader" class="customer_id new_content_header white">Planning</span>
+                                    <button ng-if="!planning.planningView" class="col-md-1 btn btnGreen pull-left" ng-click="planning.goBackToPlanningView(false)" id="btnBackForPlanning" style="width:12%">Back</button>
+                                    <span ng-if="!planning.planningView" style="padding-top: 5px;padding-left: 10px" id="titleSubHeader" class="col-md-10 pull-left customer_id new_content_header white">{{planning.vehicleObject.vehicleReg}}-{{planning.vehicleObject.vehicleType}}</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <span class="pull-right" ng-if="!planning.planningView && planning.vehicleObject.vehiclePlans[0].staff.driverName != null">
+                                        <h4 class="white">
+                                            {{planning.vehicleObject.vehiclePlans[0].staff.driverName}}
+                                            <span tooltip-placement="top" uib-tooltip="Unassign driver" tooltip-append-to-body="true">
+                                                <i id="unassignDriver" class="fa fa-close btn-remove" ng-click="planning.unassignDriver(planning.vehicleObject.vehiclePlans[0])"></i>
+                                            </span>
+                                        </h4>
+
+                                    </span>
+                                </div>
+                                <div class="col-md-4 col-md-offset-1">
+                                    <form class="form-inline">
+                                        <div class="form-group pull-left">
+                                            <button type="button" class="btn btn-default" ng-click="planning.getPreviousDay()" id="previousDay">
+                                                <i class="glyphicon glyphicon-chevron-left"></i>
+                                            </button>
+                                            <div class="input-group amp-date">
+                                                <input type="text" class="form-control custom-dateinput" datepicker-append-to-body="true" datetime-picker="EEEE, dd MMM,yyyy" id="plannerDateInput" name="plannerDate" ng-model="planning.plannerDate" is-open="planning.open.openPlannerDate" required ng-focus="planning.openCalendar($event, 'openPlannerDate')" enable-time="false" show-weeks="false" custom-class="planning.getHolidays(date,mode)" ng-change="planning.refreshData()" ng-click="planning.openCalendar($event, 'openPlannerDate')"/>
+                                                <label for="plannerDate" class="input-group-addon" ng-click="planning.openCalendar($event, 'openPlannerDate')"><i class="fa fa-calendar"></i></label>
+                                            </div>
+                                            <button type="button" class="btn btn-default" ng-click="planning.getNextDay()" id="nextDay">
+                                                <i class="glyphicon glyphicon-chevron-right"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div> 
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-7 top10">
+                            <div ng-show="planning.planningView">
+                                <uib-accordion close-others="true" id="vehicleAccordian">
+                                    <uib-accordion-group is-open="status.open" ng-init="($index == 0 ? status.open = true : status.open = false); planning.initAccordian($index, vehicleType)" class="accordion-header" id="header{{$index + 1}}"  ng-repeat="vehicleType in planning.vehicleTypeList">
+                                        <uib-accordion-heading>
+                                            <div id="vehicleType{{$index + 1}}" ng-click="planning.getVehiclesWithPlan(vehicleType)" dragdrop accordian="status.open" >
+                                                <i id="{{vehicleType}}" ng-class="{'fa fa-minus-circle': status.open, 'fa fa-plus-circle': !status.open}"></i>
+                                                {{vehicleType}}
+                                            </div>
+                                        </uib-accordion-heading>
+                                        <div style="width: 100%;overflow-x: auto" id="{{vehicleType}}Content">
+                                            <table id="vehiclePlanTable{{$index + 1}}" class="standard-table table-striped table-bordered jobTable">
+                                                <thead>
+                                                <th style="width:6%">
+                                                    &nbsp;
+                                                </th>
+                                                <th >
+                                                    &nbsp;
+                                                </th>
+                                                <th>
+                                                    Artic
+                                                </th>
+                                                <th>
+                                                    Driver Name
+                                                </th>
+                                                <th>
+                                                    Unit
+                                                </th>
+                                                <th>
+                                                    Vehicle Size
+                                                </th>
+                                                <th>
+                                                    Tail Lift
+                                                </th>
+                                                <th>
+                                                    Internal Height
+                                                </th>
+                                                <th>
+                                                    Internal Length
+                                                </th>
+                                                <th>
+                                                    Total Weight
+                                                </th>
+                                                <th>
+                                                    Total Pallet Qty
+                                                </th>
+                                                <th>
+                                                    Total Jobs
+                                                </th>
+                                                <th>
+                                                    Total Price
+                                                </th>
+
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-if="(!planning.vehicles || planning.vehicles.length == 0)">
+                                                        <td colspan="12">
+                                                            No data available.
+                                                        </td>
+                                                    </tr>
+                                                    <tr id="vehicleType{{$parent.$parent.$index + 1}}planningRow{{$index + 1}}" style="cursor: pointer" ng-if="planning.vehicles.length > 0" ng-repeat="vehicleObj in planning.vehicles" dragdrop droppable="true" droppable-model-list="planning.vehicles" on-dropped="planning.onDropped">
+                                                        <td ng-click="planning.getVehicleContents(vehicleObj.id)" style="width:3%">
+                                                            <i id="vehicleType{{$parent.$parent.$index + 1}}planningRow{{$index + 1}}red" tooltip-class="customClass" tooltip-placement="top" uib-tooltip="Unqualified driver is assigned" class="pull-left glyphicon glyphicon-warning-sign" style="color: red" ng-if="planning.checkDriverQualification(vehicleObj, 'red')"></i>
+                                                            <i id="vehicleType{{$parent.$parent.$index + 1}}planningRow{{$index + 1}}gray" tooltip-class="customClass" tooltip-placement="top" uib-tooltip="No driver is assigned" class="pull-left glyphicon glyphicon-ban-circle" style="color: gray" ng-if="planning.checkDriverQualification(vehicleObj, 'gray')"></i>
+                                                            <i id="vehicleType{{$parent.$parent.$index + 1}}planningRow{{$index + 1}}green" tooltip-class="customClass" tooltip-placement="top" uib-tooltip="Qualified driver is assigned" class="pull-left glyphicon glyphicon-ok-sign" style="color: green" ng-if="planning.checkDriverQualification(vehicleObj, 'green')"></i>
+                                                            <img id="vehicleType{{$parent.$parent.$parent.$index + 1}}planningRow{{$index + 1}}loadImage{{$index + 1}}" class="customClass pull-right" tooltip-class="customClass" ng-if="vehicleObj.vehiclePlans[0] != undefined && vehicleObj.loadTooltip != null" tooltip-placement="top" uib-tooltip-html="vehicleObj.loadTooltip" style="height:15px;width: 15px;" ng-src="images/{{(vehicleObj).loadColor}}-light.png" >
+                                                        </td>
+                                                        <td ng-click="planning.getVehicleContents(vehicleObj.id)" >
+                                                            <a class="tcp-word-wrapper" id="{{vehicleType}}">{{vehicleObj.vehicleReg}}</a>
+                                                        </td>
+                                                        <td ng-click="planning.getVehicleContents(vehicleObj.id)" >
+                                                            <p id="tblArtic{{$index + 1}}" class="tcp-word-wrapper" ng-bind="vehicleObj.artic"></p>
+                                                        </td>
+                                                        <td style="vertical-align: top">
+                                                            <span >
+                                                                <span class="pull-left tcp-word-wrapper" style="width:90%;display: inline" ng-click="planning.getVehicleContents(vehicleObj.id)" id="tblVehDriverName{{$index + 1}}"  ng-bind="vehicleObj.vehiclePlans[0].staff.driverName"></span>
+                                                                <span class="pull-right" style="width:10%;display:inline;padding-left: 5px">
+                                                                    <i tooltip-placement="top" uib-tooltip="Unassign driver" tooltip-append-to-body="true" ng-if="vehicleObj.vehiclePlans[0].staff.driverName != null" id="unassignDriverPlanningTable" class="fa fa-close btn-remove" ng-click="planning.unassignDriver(vehicleObj.vehiclePlans[0])"></i>
+                                                                </span>
+                                                            </span>
+                                                        </td>
+                                                        <td style="vertical-align: top">
+                                                            <span >
+                                                                <span class="pull-left tcp-word-wrapper" style="width:90%;display: inline" ng-click="planning.getVehicleContents(vehicleObj.id)" id="tblVehUnitName{{$index + 1}}"  ng-bind="vehicleObj.vehiclePlans[0].unitName"></span>
+                                                                <span class="pull-right" style="width:10%;display:inline;padding-left: 5px">
+                                                                    <i tooltip-placement="top" uib-tooltip="Unassign unit" tooltip-append-to-body="true" ng-if="vehicleObj.vehiclePlans[0].unitName != null" id="unassignUnitPlanningTable{{$index + 1}}" class="fa fa-close btn-remove" ng-click="planning.unassignUnit(vehicleObj.vehiclePlans[0])"></i>
+                                                                </span>
+                                                            </span>
+                                                        </td>
+                                                        <td ng-click="planning.getVehicleContents(vehicleObj.id)" >
+                                                            <p id="tblVehicleSize{{$index + 1}}" class="tcp-word-wrapper" ng-bind="vehicleObj.vehicleSize"></p>
+                                                        </td>
+                                                        <td ng-click="planning.getVehicleContents(vehicleObj.id)" >
+                                                            <p id="tblVehTailLift{{$index + 1}}" class="tcp-word-wrapper" ng-bind="vehicleObj.tailLift | true_false"></p>
+                                                        </td>
+                                                        <td ng-click="planning.getVehicleContents(vehicleObj.id)" >
+                                                            <p id="tblVehInternalHeight{{$index + 1}}" class="tcp-word-wrapper" ng-bind="vehicleObj.internalHeight"></p>
+                                                        </td>
+                                                        <td ng-click="planning.getVehicleContents(vehicleObj.id)" >
+                                                            <p id="tblVehInternalLength{{$index + 1}}" class="tcp-word-wrapper" ng-bind="vehicleObj.internalLength"></p>
+                                                        </td>
+                                                        <td ng-click="planning.getVehicleContents(vehicleObj.id)" >
+                                                            <p id="tblTotalWeight{{$index + 1}}" class="tcp-word-wrapper" ng-bind="vehicleObj.vehiclePlans[0].totalWeight"></p>
+                                                        </td>
+                                                        <td ng-click="planning.getVehicleContents(vehicleObj.id)" >
+                                                            <p id="tblTotalPalletQty{{$index + 1}}" class="tcp-word-wrapper" ng-bind="vehicleObj.vehiclePlans[0].totalPalletQty"></p>
+                                                        </td>
+                                                        <td ng-click="planning.getVehicleContents(vehicleObj.id)" >
+                                                            <p id="tblTotalJobs{{$index + 1}}" class="tcp-word-wrapper" ng-bind="vehicleObj.vehiclePlans[0].totalJobs"></p>
+                                                        </td>
+                                                        <td ng-click="planning.getVehicleContents(vehicleObj.id)" >
+                                                            <p id="tblTotalPrice{{$index + 1}}" class="tcp-word-wrapper" ng-bind="vehicleObj.vehiclePlans[0].totalPrice"></p>
+                                                        </td>
+
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </uib-accordion-group>
+                                </uib-accordion>
+                            </div>
+                            <div ng-show="!planning.planningView">
+                                <div style="max-height:400px; overflow-y: auto">
+                                    <table id="vehicleContentTable" infinite-scroll='planning.nextPageForVehicleContents()' infinite-scroll-parent="true" infinite-scroll-distance="2" class="standard-table table-striped table-bordered jobTable">
+                                        <thead>
+                                        <th>
+                                            Customer
+                                        </th>
+                                        <th ng-click='planning.setOrder("palletQty")'>
+                                            Pallet Qty
+                                        </th>
+                                        <th ng-click='planning.setOrder("weight")'>
+                                            Weight
+                                        </th>
+                                        <th>
+                                            Tail Lift
+                                        </th>
+                                        <th>
+                                            ADR 
+                                        </th>
+                                        <th>
+                                            Collection Point
+                                        </th>
+                                        <th ng-click='planning.setOrder("collectionDateTime")'>
+                                            Collection Date/Time
+                                        </th>
+                                        <th>
+                                            Delivery Point
+                                        </th>
+                                        <th ng-click='planning.setOrder("deliveryDateTime")'>
+                                            Delivery Date/Time
+                                        </th>
+                                        <th>
+                                            Price Quoted 
+                                        </th>
+                                        <th>
+                                            Comments
+                                        </th>
+                                        <th>
+
+                                        </th>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-if="(!planning.vehicleContentList || planning.vehicleContentList.length == 0)" dragdrop droppable="true" on-dropped="planning.onDropped">
+                                                <td colspan="11">
+                                                    No data available.
+                                                </td>
+                                            </tr>
+                                            <tr ng-if="planning.vehicleContentList.length > 0" ng-repeat="vehicleContent in planning.vehicleContentList" dragdrop droppable="true" on-dropped="planning.onDropped">
+                                                <td ng-click="planning.showJobModal(vehicleContent.id)">
+                                                    <p id="tblCustomerName{{$index + 1}}" class="tcp-word-wrapper" ng-bind="vehicleContent.customer.customerName"></p>
+                                                </td>
+                                                <td ng-click="planning.showJobModal(vehicleContent.id)">
+                                                    <p id="tblPalletQty{{$index + 1}}" class="tcp-word-wrapper" ng-bind="vehicleContent.palletQty !== undefined ? vehicleContent.palletQty : 'N / A'"></p>
+                                                </td>
+                                                <td ng-click="planning.showJobModal(vehicleContent.id)">
+                                                    <p id="tblWeight{{$index + 1}}" class="tcp-word-wrapper" ng-bind="vehicleContent.weight"></p>
+                                                </td>
+                                                <td ng-click="planning.showJobModal(vehicleContent.id)">
+                                                    <p id="tblTailLift{{$index + 1}}" class="tcp-word-wrapper" ng-bind="vehicleContent.tailLift | true_false"></p>
+                                                </td>
+                                                <td ng-click="planning.showJobModal(vehicleContent.id)">
+                                                    <p id="tblAdr{{$index + 1}}" class="tcp-word-wrapper" ng-bind="vehicleContent.adr | true_false"></p>
+                                                </td>
+                                                <td ng-click="planning.showJobModal(vehicleContent.id)">
+                                                    <p id="tblCollectionPostcode{{$index + 1}}" class="tcp-word-wrapper" ng-bind="vehicleContent.collectionPointName"></p>
+                                                </td>
+                                                <td ng-click="planning.showJobModal(vehicleContent.id)">
+                                                    <p id="tblCollectionDateTime{{$index + 1}}" class="tcp-word-wrapper" ng-bind="vehicleContent.collectionDateTime | date:angularDateTimeFormat"></p>
+                                                </td>
+                                                <td ng-click="planning.showJobModal(vehicleContent.id)">
+                                                    <p id="tblDeliveryPostcode{{$index + 1}}" class="tcp-word-wrapper" ng-bind="vehicleContent.deliveryPointName"></p>
+                                                </td>
+                                                <td ng-click="planning.showJobModal(vehicleContent.id)">
+                                                    <p id="tblDeliveryDateTime{{$index + 1}}" class="tcp-word-wrapper" ng-bind="vehicleContent.deliveryDateTime | date:angularDateTimeFormat"></p>
+                                                </td>
+                                                <td ng-click="planning.showJobModal(vehicleContent.id)">
+                                                    <p id="tblPriceQuoted{{$index + 1}}" class="tcp-word-wrapper" ng-bind="vehicleContent.priceQuoted"></p>
+                                                </td>
+                                                <td ng-click="planning.showJobModal(vehicleContent.id)">
+                                                    <p id="tblComments{{$index + 1}}" class="tcp-word-wrapper" ng-bind="vehicleContent.comments"></p>
+                                                </td>
+                                                <td>
+                                                    <span tooltip-placement="top" uib-tooltip="Unassign job" tooltip-append-to-body="true">
+                                                        <i id="unassignJob" class="fa fa-close btn-remove" ng-click="planning.unassignJob(vehicleContent.id, $index)"></i>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5 top20">
+                            <div class="row tabpanel planning-tabs">
+                                <ul class="nav-tabs" role="tablist" id="PlanningRightTab">
+                                    <li>
+                                        <a href="" aria-controls="jobs"  ng-class="planning.activeView == 'jobs' ? 'tabgreencolor' : 'tabcolor'" role="tab" ng-click="planning.changeView('jobs')">Jobs</a>
+                                    </li>
+                                    <li>
+                                        <a href="" id="driverTab" aria-controls="drivers"  ng-class="planning.activeView == 'drivers' ? 'tabgreencolor' : 'tabcolor'" role="tab" ng-click="planning.changeView('drivers')">Drivers</a>
+                                    </li>
+                                    <li>
+                                        <a href="" id="unitTab" aria-controls="units"  ng-class="planning.activeView == 'units' ? 'tabgreencolor' : 'tabcolor'" role="tab" ng-click="planning.changeView('units')">Units</a>
+                                    </li>
+                                </ul>	
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane active" id="drivers" ng-if="planning.activeView == 'drivers'">
+                                        <div class="marginleft5 col-md-12 padding-left padding-top" style="max-height:500px; overflow-y: auto">
+                                            <table infinite-scroll='planning.nextPageForStaffs()' infinite-scroll-distance="2" id="driverTable" class="standard-table table-striped table-bordered margintb10 jobTable" infinite-scroll-parent="true">
+                                                <thead>
+                                                <th class="dropdown" >
+                                                    <span>
+                                                        Driver Name
+                                                    </span>
+                                                    <span class="pull-right">
+                                                        <span>
+                                                            <span id="filterDriverName" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': planning.driverSearchParams.driverName !== undefined && planning.driverSearchParams.driverName !== ''}" tooltip="Filter by Driver Name" tooltip-position="top" ng-click="planning.setflag()"></span>
+                                                            <ul class="dropdown-menu filter-dropdown" role="menu" tpc-dropdown style="width:100%">
+                                                                <li role="presentation">
+                                                                    <input type="text" closeenter="filterDriverName" flag="planning.setFocus" id="name" placeholder="Driver Name" name="name" class="form-control" ng-model='planning.driverSearchParams.driverName' ng-change="planning.filterDrivers()" ng-model-options="{debounce: {'default': 500}}"/>
+                                                                </li>
+                                                            </ul>
+                                                        </span>
+                                                    </span>
+                                                </th>
+                                                <th class="dropdown">
+                                                    Licence Class
+                                                    <span class="pull-right">
+                                                        <span>
+                                                            <span id="filterLicenceClass" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': planning.driverSearchParams.licenceClass !== undefined && planning.driverSearchParams.licenceClass !== ''}" tooltip="Filter by Licence Class" tooltip-position="top" ng-click="planning.setflag()"></span>
+                                                            <ul class="dropdown-menu filter-dropdown" role="menu" tpc-dropdown style="width:100%">
+                                                                <li role="presentation">
+                                                                    <input type="text" closeenter="filterLicenceClass" flag="planning.setFocus" id="name" placeholder="Licence Class" name="icenceClass" class="form-control" ng-model='planning.driverSearchParams.licenceClass' ng-change="planning.filterDrivers()" ng-model-options="{debounce: {'default': 500}}"/>
+                                                                </li>
+                                                            </ul>
+                                                        </span>
+                                                    </span>
+                                                </th>
+
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-if="(!planning.driverList || planning.driverList.length == 0)">
+                                                        <td colspan="2">
+                                                            No drivers available.
+                                                        </td>
+                                                    </tr>
+                                                    <tr ng-if="planning.driverList.length > 0"  ng-repeat="driver in planning.driverList" dragdrop dragabble="true" draggable-model-list="planning.driverList" image="images/Driver.png">
+                                                        <td>
+                                                            <p id="tblDriverName{{$index + 1}}" class="tcp-word-wrapper" ng-bind="driver.driverName"></p>
+                                                        </td>
+                                                        <td>
+                                                            <p id="tblLicenceClass{{$index + 1}}" class="tcp-word-wrapper" ng-bind="driver.licenceClass"></p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane active"   id="jobs" ng-if="planning.activeView == 'jobs'">
+                                        <div class="marginleft5 col-md-12 padding-left padding-top" style="max-height:500px;overflow-y: auto;">
+                                            <table id="jobsTable" class="standard-table table-striped table-bordered margintb10 jobTable" infinite-scroll='planning.nextPageForJobs()' infinite-scroll-distance="2"  id="newJobsTable"  infinite-scroll-parent="true">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="dropdown" >
+                                                            <span>
+                                                                Customer
+                                                            </span>
+                                                            <span class="pull-right">
+                                                                <span>
+                                                                    <span id="filterCustomer" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': planning.jobsParams.customerName !== undefined && planning.jobsParams.customerName !== ''}" tooltip="Filter by Driver Name" tooltip-position="top" ng-click="planning.setflag()"></span>
+                                                                    <ul class="dropdown-menu filter-dropdown" role="menu" tpc-dropdown >
+                                                                        <li role="presentation">
+                                                                            <input type="text" closeenter="filterCustomer" flag="planning.setFocus" id="name" placeholder="Customer" name="name" class="form-control" ng-model='planning.jobsParams.customerName' ng-change="planning.filterJobs()" />
+                                                                        </li>
+                                                                    </ul>
+                                                                </span>
+                                                            </span>
+                                                        </th>
+                                                        <th id="collectionDateTimeHeader">
+                                                            <span >Collection Date/Time</span>
+                                                        </th>
+                                                        <th class="dropdown" >
+                                                            <span>
+                                                                Collection Point
+                                                            </span>
+                                                            <span class="pull-right">
+                                                                <span>
+                                                                    <span id="collectionPostFilter" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': planning.jobsParams.collectionPostCode !== undefined && planning.jobsParams.collectionPostCode !== ''}" tooltip="Filter by collection postcode" tooltip-position="top" ng-click="planning.setflag()"></span>
+                                                                    <ul class="dropdown-menu filter-dropdown" role="menu" tpc-dropdown >
+                                                                        <li role="presentation">
+                                                                            <input type="text" closeenter="collectionPostFilter" flag="planning.setFocus" id="name" placeholder="Collection Point" name="name" class="form-control" ng-model='planning.jobsParams.collectionPostCode' ng-change="planning.filterJobs()" />
+                                                                        </li>
+                                                                    </ul>
+                                                                </span>
+                                                            </span>
+                                                        </th>
+
+
+                                                        <th id="deliveryDateHeader">
+                                                            <span >Delivery Date/Time</span>
+                                                        </th>
+                                                        <th uib-dropdown on-toggle="toggled(open)" dropdown-append-to-body="true">
+                                                            <span>
+                                                                Delivery Point
+                                                            </span>
+                                                            <span class="pull-right">
+                                                                <span>
+                                                                    <span id="deliveryPostFilter" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': planning.jobsParams.deliveryPostCode !== undefined && planning.jobsParams.deliveryPostCode !== ''}" tooltip="Filter by delivery postcode" tooltip-position="top" ng-click="planning.setflag()" uib-dropdown-toggle></span>
+                                                                    <ul class="dropdown-menu filter-dropdown dropdown-menu-right" role="menu" tpc-dropdown uib-dropdown-menu aria-labelledby="simple-dropdown">
+                                                                        <li role="presentation">
+                                                                            <input type="text" closeenter="deliveryPostFilter" flag="planning.setFocus" id="name" placeholder="Delivery Point" name="name" class="form-control" ng-model='planning.jobsParams.deliveryPostCode' ng-change="planning.filterJobs()" />
+                                                                        </li>
+                                                                    </ul>
+                                                                </span>
+                                                            </span>
+                                                        </th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-if="planning.responseComplete && (!planning.jobList || planning.jobList.length == 0)">
+                                                        <td colspan="5">
+                                                            No job available.
+                                                        </td>
+                                                    </tr>
+                                                    <tr ng-if="planning.responseComplete && planning.jobList.length > 0" ng-repeat="jobObj in planning.jobList" dragdrop dragabble="true" draggable-model-list="planning.jobList" data-container="body" data-toggle="popover" data-content="{{planning.getJobData(jobObj)}}" data-trigger="hover" data-html="true" data-placement="top" image="images/Job.png">
+                                                        <td>
+                                                            <div >
+                                                                <p id="tblCustomerName{{$index + 1}}" ng-bind="jobObj.customer.customerName" class="tcp-word-wrapper" ></p>
+                                                            </div>
+
+                                                        </td>
+                                                        <td>
+                                                            <p id="tblCollectionDateTime{{$index + 1}}" ng-bind="jobObj.collectionDateTime | date:angularDateTimeFormat" class="tcp-word-wrapper" ></p>
+                                                        </td>
+                                                        <td>
+                                                            <p id="tblCollectionPostcode{{$index + 1}}" ng-bind="jobObj.collectionPointName" class="tcp-word-wrapper" ></p>
+                                                        </td>
+                                                        <td>
+                                                            <p id="tblDeliveryDateTime{{$index + 1}}" ng-bind="jobObj.deliveryDateTime | date:angularDateTimeFormat" class="tcp-word-wrapper" ></p>
+                                                        </td>
+                                                        <td>
+                                                            <p id="tblDeliveryPostcode{{$index + 1}}" ng-bind="jobObj.deliveryPointName" class="tcp-word-wrapper" ></p>
+                                                        </td>
+
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane active" id="units" ng-if="planning.activeView == 'units'">
+                                        <div class="marginleft5 col-md-12 padding-left padding-top" style="max-height:500px; overflow-y: auto">
+                                            <table infinite-scroll='planning.nextPageForUnits()' infinite-scroll-distance="2" id="unitTable" class="standard-table table-striped table-bordered margintb10 jobTable" infinite-scroll-parent="true">
+                                                <thead>
+                                                <th class="dropdown" >
+                                                    <span>
+                                                        Vehicle Reg
+                                                    </span>
+                                                    <span class="pull-right">
+                                                        <span>
+                                                            <span id="VehicleRegId" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': planning.unitSearchParams.vehicleReg !== undefined && planning.unitSearchParams.vehicleReg !== ''}" tooltip="Filter by Vehicle registration" tooltip-position="top"  ng-click="planning.setflag()"></span>
+                                                            <ul class="dropdown-menu filter-dropdown" role="menu" tpc-dropdown >
+                                                                <li role="presentation">
+                                                                    <input type="text" closeenter="vehicleRegClass" flag="planning.setFocus" id="vehicleRegFilter" placeholder="Vehicle Reg" name="licenceClassFilter" class="form-control" ng-model='planning.unitSearchParams.vehicleReg' ng-model-options="{debounce: {'default': 500}}" ng-change="planning.filterUnits()" />
+                                                                </li>
+                                                            </ul>
+                                                        </span>
+                                                    </span>
+                                                </th>
+                                                <th id="vehicleSizeHeader" class="dropdown" >
+                                                    <span>
+                                                        Vehicle Size
+                                                    </span>
+                                                    <span class="pull-right">
+                                                        <span>
+                                                            <span id="VehicleSize" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': planning.unitSearchParams.vehicleSize !== undefined && planning.unitSearchParams.vehicleSize !== ''}" tooltip="Filter by Vehicle size" tooltip-position="top"  ng-click="planning.setflag()"></span>
+                                                            <ul class="dropdown-menu filter-dropdown" role="menu" tpc-dropdown >
+                                                                <li role="presentation">
+                                                                    <input type="text" closeenter="VehicleSize" flag="vehicle.setFocus" id="VehicleSize" placeholder="Vehicle Size" name="VehicleSize" class="form-control" ng-model='planning.unitSearchParams.vehicleSize' ng-model-options="{debounce: {'default': 500}}" ng-change="planning.filterUnits()" />
+                                                                </li>
+                                                            </ul>
+                                                        </span>
+                                                    </span>
+                                                </th>
+                                                <th class="dropdown" >
+                                                    <span>
+                                                        Vehicle Type
+                                                    </span>
+                                                    <span class="pull-right">
+                                                        <span>
+                                                            <span id="VehicleType" class="sort_row glyphicon glyphicon-filter dropdown-toggle tooltips" data-toggle="dropdown" ng-class="{'active_filter': planning.unitSearchParams.vehicleType !== undefined && planning.unitSearchParams.vehicleType !== ''}" tooltip="Filter by Vehicle type" tooltip-position="top"  ng-click="planning.setflag()"></span>
+                                                            <ul class="dropdown-menu filter-dropdown" role="menu" tpc-dropdown >
+                                                                <li role="presentation">
+                                                                    <input type="text" closeenter="VehicleType" flag="vehicle.setFocus" id="VehicleType" placeholder="Vehicle Type" name="VehicleType" class="form-control" ng-model='planning.unitSearchParams.vehicleType' ng-model-options="{debounce: {'default': 500}}" ng-change="planning.filterUnits()" />
+                                                                </li>
+                                                            </ul>
+                                                        </span>
+                                                    </span>
+                                                </th>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-if="(!planning.unitList || planning.unitList.length == 0)">
+                                                        <td colspan="3">
+                                                            No units available.
+                                                        </td>
+                                                    </tr>
+                                                    <tr ng-if="planning.unitList.length > 0"  ng-repeat="unit in planning.unitList" dragdrop dragabble="true" draggable-model-list="planning.unitList" image="images/Driver.png">
+                                                        <td>
+                                                            <p id="tblUnitVehicleReg{{$index + 1}}" class="tcp-word-wrapper" ng-bind="unit.vehicleReg"></p>
+                                                        </td>
+                                                        <td>
+                                                            <p id="tblUnitVehicleSize{{$index + 1}}" class="tcp-word-wrapper" ng-bind="unit.vehicleSize"></p>
+                                                        </td>
+                                                        <td>
+                                                            <p id="tblUnitVehicleType{{$index + 1}}" class="tcp-word-wrapper" ng-bind="unit.vehicleType"></p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
